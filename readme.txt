@@ -69,5 +69,5 @@ This plugin will add the settings to the Integration tab, to be found in the Woo
 Starting the WooCommerce 2.1 release there are no conflicts. However for earlier the plugin might conflict with the default Google Analytics integration for WooCommerce.
 
 == Changelog ==
-= 1.0 - 22/06/2014 =
+= 1.0 - 25/06/2014 =
  * Initial release
