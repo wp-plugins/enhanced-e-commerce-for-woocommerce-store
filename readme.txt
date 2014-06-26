@@ -1,4 +1,4 @@
-=== Enhanced E-commerce Google Analytics Plugin ===
+===  Enhance E-Commerce Google Analytics Plugin for WooCommerce ===
 Contributors: Tatvic
 Plugin Name: Enhanced E-commerce for Woocommerce store
 Plugin URI:
@@ -40,12 +40,12 @@ This plugin provides the integration between Enhanced Ecommerce feature of Googl
 * Check the “Enable Enhanced E-commerce tracking”
 * For tracking the Guest users, you need to check the box. Unchecking the box might cause an uneven funnel reported to Google Analytics.
 
-= Events captured  the Enhanced E-commerce plugin =
-* Add to cart on all sections of the website
-* Product impressions are recorded on load of product page and add-to-cart on category pages
-* As woocommerce supports single step checkout, we have created a standard three steps checkout process consisting of 1) Checkout Page View; 2) Login; and 3) Proceed to payment
-* As the Login step can be optional for the stores having Guest checkout functionality enabled
-* The standard thank you page event that records the successful transactions
+= Events captured by the Enhanced E-commerce plugin =
+* Add to Cart event captured on all pages of the website
+* Product Impressions event captured on the load of the product page and Add-to-Cart on category pages
+* Standard three steps checkout process consisting of a) Checkout Page View; b) Login; and c) Proceed to payment
+* Login step can be optional for the stores who have Guest checkout functionality enabled
+* Standard thank you page event that captures transaction data
 
 
 == Installation ==
