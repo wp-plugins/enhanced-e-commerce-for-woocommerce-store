@@ -50,8 +50,9 @@ This plugin provides the integration between Enhanced Ecommerce feature of Googl
 
 == Installation ==
 1. Download the plugin file to your computer and unzip it
-2. Using an FTP program, or your hosting control panel, upload the unzipped plugin folder to your WordPress installation’s wp-content/plugins/ directory.
-3. Activate the plugin from the Plugins menu within the WordPress admin.
+2. Using an FTP program, or your hosting control panel, upload the unzipped plugin folder to your WordPress installation’s wp-content/plugins/ directory
+3. Activate the plugin from the Plugins menu within the WordPress admin
+4. Enter your email-address and Google Analytics ID for the plugin to enable the tracking code
 
 == Screenshots ==
 1. Enable Enhanced E-commerce for your profile/view. This is a profile / view level setting and can be accessed under Admin > View > E-commerce Settings. Also, add meaningful labels for your checkout steps. We recommend you to label as, Step 1 : Checkout View; Step 2 : Login; Step 3 : Proceed to payment;
