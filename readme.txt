@@ -7,7 +7,7 @@ Author URI: http://www.tatvic.com/
 Author: Tatvic
 Requires at least: 3.6
 Tested up to: 3.8
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 Version: 1.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -20,21 +20,22 @@ This plugin provides the integration between Enhanced Ecommerce feature of Googl
 = Things to keep in mind before enabling the Enhanced E-commerce plugin =
 * Enable Enhanced E-commerce for your profile/view. This is a profile / view level setting and can be accessed under Admin > View > E-commerce Settings
 * Also, add meaningful labels for your checkout steps. We recommend you to label as, Step 1 : Checkout View; Step 2 : Login; Step 3 : Proceed to payment
-* Remove standard E-commerce code from thank you along with the ecommerce.js which is included by <code>ga('require', 'ecommerce', 'ecommerce.js');</code>
-* You need to include ec.js. This can be done by adding a single line of code below your default Google Analytics code snippet <code>ga('require', ‘ec’, 'ec.js');</code>
+* Remove standard E-commerce code from thank you along with the ecommerce.js which is included by <code>ga('require', 'ecommerce', 'ecommerce.js');</code>. If you are using a third party plugin for e-commerce tracking, you would have to disable the plugin.
+* You need to include ec.js. This can be done by adding a single line of code below your default Google Analytics code snippet <code>ga('require', 'ec', 'ec.js');</code>
 * If you are using the Universal Analytics Tag of Google Tag Manager, you need to replace it with a custom HTML tag with the following code. Replace UA-XXXX-Y with your property ID
-<pre><!-- Google Analytics tag -->
-	<script>
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+<pre>
+<!-- Google Analytics tag -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 	
-		ga('create', 'UA-XXXX-Y', 'auto');
-		ga('send', 'pageview');
-		ga(‘require’,’ec’,’ec.js’);
-	</script>
-	<!-- End Google Analytics -->
+ga('create', 'UA-XXXX-Y', 'auto');
+ga('send', 'pageview');
+ga('require','ec','ec.js');
+</script>
+<!-- End Google Analytics -->
 </pre>
 * Next, you need to activate your plugin from the Settings page for the plugin accessed under, WooCommerce > Settings > Integration > Enhanced Ecommerce Google Analytics
 * Check the “Enable Enhanced E-commerce tracking”
@@ -70,5 +71,7 @@ This plugin will add the settings to the Integration tab, to be found in the Woo
 Starting the WooCommerce 2.1 release there are no conflicts. However for earlier the plugin might conflict with the default Google Analytics integration for WooCommerce.
 
 == Changelog ==
+
 = 1.0 - 25/06/2014 =
  * Initial release
+
