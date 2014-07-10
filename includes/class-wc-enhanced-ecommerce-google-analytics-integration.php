@@ -535,13 +535,13 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @access public
      * @return void
      */
-    public function default_pageview() {
+     public function default_pageview() {
         global $woocommerce;
-        if ($this->disable_tracking($this->ga_enhanced_ecommerce_tracking_enabled) || $this->disable_tracking($this->ga_standard_tracking_enabled)) {
+        if ($this->disable_tracking($this->ga_enhanced_ecommerce_tracking_enabled)) {
             return;
         }
 
-        if ($this->disable_tracking($this->ga_standard_tracking_enabled) && $this->disable_tracking($this->ga_enhanced_ecommerce_tracking_enabled)) {
+        if (!$this->disable_tracking($this->ga_standard_tracking_enabled)) {
             $inline_js = "ga('send', 'event', 'Enhanced-Ecommerce', 'pageview', 'footer',{'nonInteraction': 1})";
         } else {
             $inline_js = "ga('send','pageview');";
