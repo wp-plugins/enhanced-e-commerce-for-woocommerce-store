@@ -204,11 +204,10 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             foreach ($order->get_items() as $item) {
                 $_product = $order->get_product_from_item($item);
 
-                $code .= "ga('ec:addProduct', {";
-                $code .= "'id': '" . esc_js($order->get_order_number()) . "',";
+                $code .= "ga('ec:addProduct', {";                
                 $code .= "'name': '" . esc_js($item['name']) . "',";
-                $code .= "'sku': '" . esc_js($_product->get_sku() ? __('SKU:', 'woocommerce') . ' ' . $_product->get_sku() : $_product->id ) . "',";
-
+                $code .= "'id': '" . esc_js($_product->get_sku()) . "',";                
+                
                 if (isset($_product->variation_data)) {
 
                     $code .= "'category': '" . esc_js(woocommerce_get_formatted_variation($_product->variation_data, true)) . "',";
@@ -446,7 +445,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
                 'quantity': $(this).parents('tr').find('.product-quantity .qty').val()
               });
               ga('ec:setAction', 'remove');
-              ga('send', 'event', 'UX', 'click', 'remove from cart',{'nonInteraction': 1});
+              ga('send', 'event', 'Enhanced-Ecommerce', 'click', 'remove from cart',{'nonInteraction': 1});
               });"
             );
         } else {
@@ -457,7 +456,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
                 'quantity': $(this).parents('tr').find('.product-quantity .qty').val()
               });
               ga('ec:setAction', 'remove');
-              ga('send', 'event', 'UX', 'click', 'remove from cart',{'nonInteraction': 1});
+              ga('send', 'event', 'Enhanced-Ecommerce', 'click', 'remove from cart',{'nonInteraction': 1});
               });"
             );
         }
@@ -544,7 +543,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         if (!$this->disable_tracking($this->ga_standard_tracking_enabled)) {
             $inline_js = "ga('send', 'event', 'Enhanced-Ecommerce', 'pageview', 'footer',{'nonInteraction': 1})";
         } else {
-            $inline_js = "ga('send','pageview');";
+            $inline_js = "ga('send', 'event', 'Enhanced-Ecommerce', 'pageview', 'footer',{'nonInteraction': 1});";
         }
 
         if (version_compare($woocommerce->version, '2.1', '>=')) {
