@@ -43,6 +43,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         add_action('woocommerce_thankyou', array($this, 'ecommerce_tracking_code'));
 
         // Enhanced Ecommerce product impression hook
+        add_action('woocommerce_after_shop_loop', array($this, 'cate_page_prod_impression')); // Hook for category page
         add_action('woocommerce_after_shop_loop_item', array($this, 'product_impression'));
         add_action('woocommerce_after_single_product', array($this, 'product_detail_view'));
         add_action('woocommerce_after_cart', array($this, 'remove_cart_tracking'));
