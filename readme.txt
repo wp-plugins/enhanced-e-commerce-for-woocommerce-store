@@ -1,7 +1,7 @@
-===  Enhance E-Commerce Google Analytics Plugin for WooCommerce ===
+﻿===  Enhance E-Commerce Google Analytics Plugin for WooCommerce ===
 Contributors: Tatvic
 Plugin Name: Enhanced E-commerce for Woocommerce store
-Plugin URI:
+Plugin URI: https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-store/
 Tags: Google Analytics, Universal Analytics, Enhanced E-commerce, E-commerce, e-commerce, woo-commerce
 Author URI: http://www.tatvic.com/
 Author: Tatvic
@@ -19,6 +19,7 @@ This plugin provides the integration between Enhanced Ecommerce feature of Googl
 
 = Things to keep in mind before enabling the Enhanced E-commerce plugin =
 * Enable Enhanced E-commerce for your profile/view. This is a profile / view level setting and can be accessed under Admin > View > E-commerce Settings
+
 * Also, add meaningful labels for your checkout steps. We recommend you to label as, Step 1 : Checkout View; Step 2 : Login; Step 3 : Proceed to payment
 * Remove standard E-commerce code from thank you along with the ecommerce.js which is included by <code>ga('require', 'ecommerce', 'ecommerce.js');</code>. If you are using a third party plugin for e-commerce tracking, you would have to disable the plugin.
 * You need to include ec.js. This can be done by adding a single line of code below your default Google Analytics code snippet <code>ga('require', 'ec', 'ec.js');</code>
@@ -75,3 +76,5 @@ Starting the WooCommerce 2.1 release there are no conflicts. However for earlier
 = 1.0 - 25/06/2014 =
  * Initial release
 
+= 1.0.6 - 11/08/2014 =
+ * Added new feature - Product impressions on category page view

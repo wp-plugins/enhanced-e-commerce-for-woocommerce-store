@@ -17,11 +17,11 @@
  */
 /*
   Plugin Name: Enhanced E-commerce for Woocommerce store
-  Plugin URI: http://www.tatvic.com/enhanced-ecommerce-for-woocommerece/
+  Plugin URI: http://www.tatvic.com/enhanced-ecommerce-google-analytics-plugin-woocommerce/
   Description: Allows Enhanced E-commerce Google Analytics tracking code to be inserted into WooCommerce store pages.
   Author: Tatvic
   Author URI: http://www.tatvic.com
-  Version: 1.0
+  Version: 1.0.6
  */
 
 // Add the integration to WooCommerce
