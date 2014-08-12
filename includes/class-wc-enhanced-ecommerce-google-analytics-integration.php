@@ -43,7 +43,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         add_action('woocommerce_thankyou', array($this, 'ecommerce_tracking_code'));
 
         // Enhanced Ecommerce product impression hook
-        add_action('woocommerce_after_shop_loop', array($this, 'cate_page_prod_impression')); // Hook for category page 
         add_action('woocommerce_after_shop_loop_item', array($this, 'product_impression'));
         add_action('woocommerce_after_single_product', array($this, 'product_detail_view'));
         add_action('woocommerce_after_cart', array($this, 'remove_cart_tracking'));
@@ -241,51 +240,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 
         update_post_meta($order_id, '_ga_tracked', 1);
     }
- /**
-     * Enhanced E-commerce tracking for product impressions on category page
-     *
-     * @access public
-     * @return void
-     */
-    public function cate_page_prod_impression() {
 
-        if ($this->disable_tracking($this->ga_enhanced_ecommerce_tracking_enabled)) {
-          return;
-        }
-        
-        global $product, $woocommerce;
-
-        $parameters = array();
-        $parameters['label'] = "'" . esc_js($product->get_sku() ? __('SKU:', 'woocommerce') . ' ' . $product->get_sku() : "#" . $product->id ) . "'";
-        if (version_compare($woocommerce->version, '2.1', '>=')) {
-            wc_enqueue_js("        
-                  $('.products li').each(function(index){
-                         ga('ec:addImpression', {
-                            'id': $(this).find('.ls-pro-sku').val(),
-                            'name': $(this).find('.ls-pro-name').val(),
-                            'category': $(this).find('.ls-pro-category').val(),
-                            'price': $(this).find('.ls-pro-price').val(),
-                            'position': index+1
-                        });
-                    });
-               ga('send', 'event', 'ecommerce', 'product_impression_cp', {'nonInteraction': 1});                    
-                ");
-        } else {
-             
-             $woocommerce->add_inline_js("
-                   $('.products li').each(function(index){
-                         ga('ec:addImpression', {
-                            'id': $(this).find('.ls-pro-sku').val(),
-                            'name': $(this).find('.ls-pro-name').val(),
-                            'category': $(this).find('.ls-pro-category').val(),
-                            'price': $(this).find('.ls-pro-price').val(),
-                            'position': index+1
-                        });
-                    });
-               ga('send', 'event', 'ecommerce', 'product_impression_cp', {'nonInteraction': 1});
-              ");
-        }
-    }
     /**
      * Enhanced E-commerce tracking for single product add to cart
      *
