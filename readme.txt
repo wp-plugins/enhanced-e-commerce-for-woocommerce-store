@@ -1,6 +1,6 @@
-===  Enhance E-Commerce Google Analytics Plugin for WooCommerce ===
+﻿===  Enhance Ecommerce Google Analytics Plugin for WooCommerce ===
 Contributors: Tatvic
-Plugin Name: Enhanced E-commerce for Woocommerce store
+Plugin Name: Enhanced Ecommerce for Woocommerce store
 Plugin URI:
 Tags: Google Analytics, Universal Analytics, Enhanced E-commerce, E-commerce, e-commerce, woo-commerce
 Author URI: http://www.tatvic.com/
