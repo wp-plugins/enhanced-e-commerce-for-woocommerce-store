@@ -2,20 +2,31 @@
 Contributors: Tatvic
 Plugin Name: Enhanced Ecommerce for Woocommerce store
 Plugin URI: http://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-store/
-Tags: Google Analytics, Universal Analytics, Enhanced E-commerce, E-commerce, e-commerce, woo-commerce
+Tags: Google Analytics, Universal Analytics, Enhanced E-commerce, E-commerce, e-commerce, woo-commerce,Ecommerce,woocommerce
 Author URI: http://www.tatvic.com/
 Author: Tatvic
 Requires at least: 3.6
-Tested up to: 3.8
-Stable tag: 1.0.5
-Version: 1.0.5
+Tested up to: 3.9.2
+Stable tag: 1.0.6.1
+Version: 1.0.6.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Provides integration between Google Analytics Enhanced Ecommerce and WooCommerce.
 
 == Description ==
-This plugin provides the integration between Enhanced Ecommerce feature of Google Analytics and the WooCommerce plugin. You can track the user beahviour across your e-commerce store starting from product views to thank you page. It only supports the new Universal Analytics.
+<a href="http://www.tatvic.com/enhanced-ecommerce-google-analytics-plugin-woocommerce/">Enhanced Ecommerce Google Analytics</a> is a Free WooCommerce Plugin which allows you to use the newly launched feature of Google Analytics – Enhanced Ecommerce.You can track the user behavior across your e-commerce store starting from product views to thank you page.Enhanced Ecommerce is still in beta and supports only Universal Analytics.
+
+= Features of Plugin =
+* Quick & Easy installation from the wordpress interface
+* Supports four New Reports in Enhanced Ecommerce
+     > Shopping Behaviour Report
+     > Checkout Behaviour Report
+     > Product Performance Report
+     > Sales Performance Report
+* Supports Guest checkout functionality
+* Captures Product Impressions events on the load of the category page and Add-to-Cart events when add-to-cart button is clicked
+* Captures Product Impressions events on the load of the product page and Add-to-Cart events when add-to-cart button is clicked
 
 = Things to keep in mind before enabling the Enhanced E-commerce plugin =
 * Enable Enhanced E-commerce for your profile/view. This is a profile / view level setting and can be accessed under Admin > View > E-commerce Settings
@@ -23,7 +34,7 @@ This plugin provides the integration between Enhanced Ecommerce feature of Googl
 * Also, add meaningful labels for your checkout steps. We recommend you to label as, Step 1 : Checkout View; Step 2 : Login; Step 3 : Proceed to payment
 * Remove standard E-commerce code from thank you along with the ecommerce.js which is included by <code>ga('require', 'ecommerce', 'ecommerce.js');</code>. If you are using a third party plugin for e-commerce tracking, you would have to disable the plugin.
 * You need to include ec.js. This can be done by adding a single line of code below your default Google Analytics code snippet <code>ga('require', 'ec', 'ec.js');</code>
-* If you are using the Universal Analytics Tag of Google Tag Manager, you need to replace it with a custom HTML tag with the following code. Replace UA-XXXX-Y with your property ID
+* Users who are using Universal Analytics Tag in GTM, you will have to replace it with a custom HTML tag. Add the following code in your customer HTML tag. After adding the code, kindly replace UA-XXXXXXX-Y with your Google Analytics Property ID.
 <pre>
 <!-- Google Analytics tag -->
 <script>
@@ -38,17 +49,9 @@ ga('require','ec','ec.js');
 </script>
 <!-- End Google Analytics -->
 </pre>
-* Next, you need to activate your plugin from the Settings page for the plugin accessed under, WooCommerce > Settings > Integration > Enhanced Ecommerce Google Analytics
-* Check the “Enable Enhanced E-commerce tracking”
-* For tracking the Guest users, you need to check the box. Unchecking the box might cause an uneven funnel reported to Google Analytics.
-
-= Events captured by the Enhanced E-commerce plugin =
-* Add to Cart event captured on all pages of the website
-* Product Impressions event captured on the load of the product page and Add-to-Cart on category pages
-* Standard three steps checkout process consisting of a) Checkout Page View; b) Login; and c) Proceed to payment
-* Login step can be optional for the stores who have Guest checkout functionality enabled
-* Standard thank you page event that captures transaction data
-
+* After adding the above code, you will have to activate your plug-in from the Settings page. You can access the setting page from here WooCommerce -> Settings ->Integration ->Enhanced Ecommerce Google Analytics.
+* Find “Enable Enhanced Ecommerce Tracking” in the settings page and check the box to enable the plugin
+* If you have a guest checkout on your WooCommerce store, then Check the box “Track Login Steps For Guest Users”. If you have a guest login but you do not check the box, then it might cause an uneven funnel reporting in Google Analytics.
 
 == Installation ==
 1. Download the plugin file to your computer and unzip it
@@ -76,5 +79,7 @@ Starting the WooCommerce 2.1 release there are no conflicts. However for earlier
 = 1.0 - 25/06/2014 =
  * Initial release
 
-= 1.0.6 - 11/08/2014 =
- * Added new feature - Product impressions on category page view
+= 1.0.6.1 - 14/08/2014 =
+ * Added new feature - Product impressions and Product click on category page view , including the    default pagination
+ * Fixed-Allow Special Characters in javascript
+ 

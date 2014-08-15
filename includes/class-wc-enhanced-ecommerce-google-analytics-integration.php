@@ -9,6 +9,7 @@
  * @extends		WC_Integration
  * @author Sudhir Mishra <sudhirxps@gmail.com>
  */
+
 class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 
     /**
@@ -20,7 +21,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
     public function __construct() {
         $this->id = 'enhanced_ecommerce_google_analytics';
         $this->method_title = __('Enhanced Ecommerce Google Analytics', 'woocommerce');
-        $this->method_description = __('Enhanced Ecommerce is a new feature of Universal Analytics that generates detailed statistics about the users journey from product page to thank you page on your e-store. <br/><a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce">Know more about enhanced e-commerce.</a>', 'woocommerce');
+        $this->method_description = __('Enhanced Ecommerce is a new feature of Universal Analytics that generates detailed statistics about the users journey from product page to thank you page on your e-store. <br/><a href="http://www.tatvic.com/blog/enhanced-ecommerce/">Know more about enhanced e-commerce.</a>', 'woocommerce');
 
         // Load the settings.
         $this->init_form_fields();
@@ -34,7 +35,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         $this->enable_guest_checkout = get_option('woocommerce_enable_guest_checkout') == 'yes' ? true : false;
         $this->track_login_step_for_guest_user = $this->get_option('track_login_step_for_guest_user') == 'yes' ? true : false;
         $this->ga_enhanced_ecommerce_tracking_enabled = $this->get_option('ga_enhanced_ecommerce_tracking_enabled');
-
+        $this->ga_enhanced_ecommerce_category_page_impression_thresold = $this->get_option('ga_enhanced_ecommerce_category_page_impression_thresold');
+        
         // Actions
         add_action('woocommerce_update_options_integration_enhanced_ecommerce_google_analytics', array($this, 'process_admin_options'));
         // API Call to LS with e-mail
@@ -43,6 +45,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         add_action('woocommerce_thankyou', array($this, 'ecommerce_tracking_code'));
 
         // Enhanced Ecommerce product impression hook
+        add_action('woocommerce_after_shop_loop', array($this, 'cate_page_prod_impression')); // Hook for category page
         add_action('woocommerce_after_shop_loop_item', array($this, 'product_impression'));
         add_action('woocommerce_after_single_product', array($this, 'product_detail_view'));
         add_action('woocommerce_after_cart', array($this, 'remove_cart_tracking'));
@@ -102,6 +105,12 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
                 'checkboxgroup' => '',
                 'description' => sprintf(__('For Guest users Login is not a mandatory step. Checking the box would consider the click event on place order as Login as well as Checkout.', 'woocommerce')),
                 'default' => get_option('track_login_step_for_guest_user') ? get_option('track_login_step_for_guest_user') : 'no'  // Backwards compat
+            ),
+            'ga_enhanced_ecommerce_category_page_impression_thresold' => array(
+                'title' => __('Impression Threasold', 'woocommerce'),
+                'description' => sprintf(__('Impression thresold for category page. Send hit after these many number of products impressions', 'woocommerce')),
+                'type' => 'input',
+                'default' => '6'
             )
         );
         /* When user updates the email, post it to the remote server */
@@ -153,11 +162,12 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
+                            //Plugin Version :1.0.6
 			ga('create', '" . esc_js($tracking_id) . "', '" . $set_domain_name . "');
                         ga('require', 'ec', 'ec.js');
 			</script>";
-    }
+      
+      }
 
     /**
      * Google Analytics eCommerce tracking
@@ -192,22 +202,23 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
+                        //Plugin Version :1.0.6
 			ga('create', '" . esc_js($tracking_id) . "', '" . $set_domain_name . "');			
 			ga('require', 'ec', 'ec.js');
-
+                        
 			
 			";
-
+        
+        
         // Order items
         if ($order->get_items()) {
             foreach ($order->get_items() as $item) {
                 $_product = $order->get_product_from_item($item);
 
-                $code .= "ga('ec:addProduct', {";                
+                $code .= "ga('ec:addProduct', {";
                 $code .= "'name': '" . esc_js($item['name']) . "',";
-                $code .= "'id': '" . esc_js($_product->get_sku()) . "',";                
-                
+                $code .= "'id': '" . esc_js($_product->get_sku()) . "',";
+
                 if (isset($_product->variation_data)) {
 
                     $code .= "'category': '" . esc_js(woocommerce_get_formatted_variation($_product->variation_data, true)) . "',";
@@ -242,6 +253,128 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
     }
 
     /**
+     * Enhanced E-commerce tracking for product impressions on category page
+     *
+     * @access public
+     * @return void
+     */
+    public function cate_page_prod_impression() {
+        
+        if ($this->disable_tracking($this->ga_enhanced_ecommerce_tracking_enabled)) {
+            return;
+        }
+        $t_category="";
+        if(is_search()){
+            $t_category="Search Results";
+        }
+        global $product, $woocommerce;
+        $impression_thresold = $this->ga_enhanced_ecommerce_category_page_impression_thresold;
+        
+        //$parameters = array();
+        //$parameters['label'] = "'" . esc_js($product->get_sku() ? __('SKU:', 'woocommerce') . ' ' . $product->get_sku() : "#" . $product->id ) . "'";
+        if (version_compare($woocommerce->version, '2.1', '>=')) {
+            wc_enqueue_js("
+            t_cnt=0;
+            t_ttl_prod=jQuery('.products li').length;
+            jQuery('.products li').each(function(index){
+            t_cnt++;
+                         ga('ec:addImpression', {
+                            'id': jQuery(this).find('.ls-pro-sku').val(),
+                            'name': jQuery(this).find('.ls-pro-name').val(),
+                            'category': jQuery(this).find('.ls-pro-category').val(),
+                            'price': jQuery(this).find('.ls-pro-price').val(),
+                            'position': index+1
+                        });
+                   
+                   if(t_ttl_prod > " .esc_js($impression_thresold)."){
+                        if((t_cnt%" .esc_js($impression_thresold).")==0){
+                            t_ttl_prod=t_ttl_prod-".esc_js($impression_thresold).";
+                            ga('send', 'event', 'ecommerce', 'product_impression_cp', {'nonInteraction': 1});  
+                        }
+                     }else{
+                       t_ttl_prod--;
+                       if(t_ttl_prod==0){
+                        ga('send', 'event', 'ecommerce', 'product_impression_cp', {'nonInteraction': 1});  
+                        }
+                    }
+                        
+                  jQuery(this).find('a:not(.add_to_cart_button)').on('click',function(){
+                                                                                        
+                       if('".esc_js($t_category)."'==''){    
+                            t_category=jQuery(this).parents('li').find('.ls-pro-category').val();
+                        }else{
+                            t_category='".esc_js($t_category)."';
+                            }
+                         ga('ec:addProduct', {
+                                    'id': jQuery(this).parents('li').find('.ls-pro-sku').val(),
+                                    'name': jQuery(this).parents('li').find('.ls-pro-name').val(),
+                                    'category': jQuery(this).parents('li').find('.ls-pro-category').val(),
+                                    'price': jQuery(this).parents('li').find('.ls-pro-price').val(),
+                                    'position': index+1
+                             });
+                              ga('ec:setAction', 'click', {list: t_category});
+                              ga('send', 'event', 'ecommerce', 'product_click', {'nonInteraction': 1});
+                              
+                        
+                            });
+                        });
+               
+               ");
+         
+        } else {
+               
+            $woocommerce->add_inline_js("
+            t_cnt=0;
+           t_ttl_prod=jQuery('.products li').length;
+           jQuery('.products li').each(function(index){
+           t_cnt++;
+                          ga('ec:addImpression', {
+                            'id': jQuery(this).find('.ls-pro-sku').val(),
+                            'name': jQuery(this).find('.ls-pro-name').val(),
+                            'category': jQuery(this).find('.ls-pro-category').val(),
+                            'price': jQuery(this).find('.ls-pro-price').val(),
+                            'position': index+1
+                        });
+                   
+                    if(t_ttl_prod > " .esc_js($impression_thresold)."){
+                        if((t_cnt%" .esc_js($impression_thresold).")==0){
+                            t_ttl_prod=t_ttl_prod-".esc_js($impression_thresold).";
+                            ga('send', 'event', 'ecommerce', 'product_impression_cp', {'nonInteraction': 1});  
+                        }
+                     }else{
+                       t_ttl_prod--;
+                       if(t_ttl_prod==0){
+                        ga('send', 'event', 'ecommerce', 'product_impression_cp', {'nonInteraction': 1});  
+                        }
+                    }
+                              
+                  jQuery(this).find('a:not(.add_to_cart_button)').on('click',function(){
+                                                      
+                       if('".esc_js($t_category)."'==''){    
+                            t_category=jQuery(this).parents('li').find('.ls-pro-category').val();
+                        }else{
+                            t_category='".esc_js($t_category)."';
+                            }
+                        
+                         ga('ec:addProduct', {
+                                    'id': jQuery(this).parents('li').find('.ls-pro-sku').val(),
+                                    'name': jQuery(this).parents('li').find('.ls-pro-name').val(),
+                                    'category': jQuery(this).parents('li').find('.ls-pro-category').val(),
+                                    'price': jQuery(this).parents('li').find('.ls-pro-price').val(),
+                                    'position': index+1
+                             });
+                              ga('ec:setAction', 'click', {list: t_category});
+                              ga('send', 'event', 'ecommerce', 'product_click', {'nonInteraction': 1});
+                              
+                        
+                            });
+                        });
+                  
+              ");
+        }
+    }
+
+    /**
      * Enhanced E-commerce tracking for single product add to cart
      *
      * @access public
@@ -254,7 +387,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 
         if (!is_single())
             return;
-
+        
         global $product, $woocommerce;
 
         $parameters = array();
@@ -315,14 +448,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         if (version_compare($woocommerce->version, '2.1', '>=')) {
 
             wc_enqueue_js("
-			$('.add_to_cart_button:not(.product_type_variable, .product_type_grouped)').click(function() {
-                           
-                              ga('ec:addImpression',{
-                                'id': $(this).parents('li').find('.ls-pro-sku').val(),
-                                'name': $(this).parents('li').find('.ls-pro-name').val(),
-                                'category': $(this).parents('li').find('.ls-pro-category').val(),
-                                'price': $(this).parents('li').find('.ls-pro-price').val(),
-                              });
+                $('.add_to_cart_button:not(.product_type_variable, .product_type_grouped)').click(function() {
+                                                       
                               // Enhanced E-commerce Add to cart clicks 
                               ga('ec:addProduct', {
                                 'id': $(this).parents('li').find('.ls-pro-sku').val(),
@@ -337,13 +464,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         } else {
             $woocommerce->add_inline_js("
 			$('.add_to_cart_button:not(.product_type_variable, .product_type_grouped)').click(function() {
-                            
-                              ga('ec:addImpression',{
-                                'id': $(this).parents('li').find('.ls-pro-sku').val(),
-                                'name': $(this).parents('li').find('.ls-pro-name').val(),
-                                'category': $(this).parents('li').find('.ls-pro-category').val(),
-                                'price': $(this).parents('li').find('.ls-pro-price').val(),
-                              });
+                                                   
                               // Enhanced E-commerce Add to cart clicks 
                               ga('ec:addProduct', {
                                 'id': $(this).parents('li').find('.ls-pro-sku').val(),
@@ -365,6 +486,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @return void
      */
     public function product_detail_view() {
+        
         if ($this->disable_tracking($this->ga_enhanced_ecommerce_tracking_enabled)) {
             return;
         }
@@ -419,6 +541,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         foreach ($category as $term) {
             $categories.=$term->name . ',';
         }
+        //remove last comma(,) if multiple categories are there
+        $categories = rtrim($categories, ",");
 
         echo "<input type='hidden' class='ls-pro-price' value='" . esc_html($product->get_price()) . "'/>"
         . "<input type='hidden' class='ls-pro-sku' value='" . $product->get_sku() . "'/>"
@@ -534,7 +658,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @access public
      * @return void
      */
-     public function default_pageview() {
+    public function default_pageview() {
+              
         global $woocommerce;
         if ($this->disable_tracking($this->ga_enhanced_ecommerce_tracking_enabled)) {
             return;
@@ -590,3 +715,4 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
     }
 
 }
+?>
