@@ -162,7 +162,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-                            //Plugin Version :1.0.6
+                            //Plugin Version :1.0.6.1
 			ga('create', '" . esc_js($tracking_id) . "', '" . $set_domain_name . "');
                         ga('require', 'ec', 'ec.js');
 			</script>";
@@ -202,7 +202,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-                        //Plugin Version :1.0.6
+                        //Plugin Version :1.0.6.1
 			ga('create', '" . esc_js($tracking_id) . "', '" . $set_domain_name . "');			
 			ga('require', 'ec', 'ec.js');
                         
