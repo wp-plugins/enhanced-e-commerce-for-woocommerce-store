@@ -21,7 +21,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
     public function __construct() {
         $this->id = "enhanced_ecommerce_google_analytics";
         $this->method_title = __("Enhanced Ecommerce Google Analytics", "woocommerce");
-        $this->method_description = __("Enhanced Ecommerce is a new feature of Universal Analytics that generates detailed statistics about the users journey from product page to thank you page on your e-store. <br/><a href='http://www.tatvic.com/blog/enhanced-ecommerce/' target='_blank'>Know more about enhanced e-commerce.</a>", "woocommerce");
+        $this->method_description = __("Enhanced Ecommerce is a new feature of Universal Analytics that generates detailed statistics about the users journey from product page to thank you page on your e-store. <br/><a href='http://www.tatvic.com/blog/enhanced-ecommerce/' target='_blank'>Know more about Enhanced Ecommerce.</a>", "woocommerce");
 
         // Load the settings.
         $this->init_form_fields();

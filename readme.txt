@@ -55,9 +55,9 @@ ga('require','ec','ec.js');
 </pre>
 * After adding the above code, you will have to activate your plug-in from the Settings page. You can access the setting page from here WooCommerce -> Settings ->Integration ->Enhanced Ecommerce Google Analytics.
 
-* Find “Enable Enhanced Ecommerce Tracking” in the settings page and check the box to enable the plugin
+* Find “Add Enhanced Ecommerce Tracking Code” in the settings page and check the box to enable the plugin
 
-* If you have a guest checkout on your WooCommerce store, then Check the box “Track Login Steps For Guest Users”. If you have a guest login but you do not check the box, then it might cause an uneven funnel reporting in Google Analytics.
+* If you have a guest checkout on your WooCommerce store, then Check the box “Add Code to Track the Login Step of Guest Users”. If you have a guest login but you do not check the box, then it might cause an uneven funnel reporting in Google Analytics.
 
 == Installation ==
 1. Download the plugin file to your computer and unzip it
