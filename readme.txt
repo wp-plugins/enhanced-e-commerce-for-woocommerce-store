@@ -7,8 +7,8 @@ Author URI: http://www.tatvic.com/
 Author: Tatvic
 Requires at least: 3.6
 Tested up to: 3.9.2
-Stable tag: 1.0.6.1
-Version: 1.0.6.1
+Stable tag: 1.0.7
+Version: 1.0.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -27,6 +27,7 @@ Provides integration between Google Analytics Enhanced Ecommerce and WooCommerce
 3. Supports Guest checkout functionality
 4. Captures Product Impressions events on the load of the category page and Add-to-Cart events when add-to-cart button is clicked
 5. Captures Product Impressions events on the load of the product page and Add-to-Cart events when add-to-cart button is clicked
+6. Supports Display Advertising Feature
 
 = Things to keep in mind before enabling the Enhanced E-commerce plugin =
 * Enable Enhanced E-commerce for your profile/view. This is a profile / view level setting and can be accessed under Admin > View > E-commerce Settings
@@ -87,4 +88,8 @@ Starting the WooCommerce 2.1 release there are no conflicts. However for earlier
 = 1.0.6.1 - 15/08/2014 =
  * Added new feature - Product impressions and Product click on category page view , including the    default pagination
  * Fixed-Allow Special Characters in javascript
+
+= 1.0.7 - 28/08/2014 =
+ * Added new feature - Display Advertising Feature
+ * Fixed-Allow back quotes and single quotes in product name, category name etc.
  
