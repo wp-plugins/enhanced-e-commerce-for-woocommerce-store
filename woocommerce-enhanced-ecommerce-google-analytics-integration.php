@@ -1,6 +1,6 @@
 <?php
 
-/*  Copyright 2014 Sudhir Mishra (email : sudhirxps@gmail.com)
+/*  Copyright 2014 Sudhir Mishra (email : sudhir@tatvic.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License, version 2, as
@@ -21,7 +21,7 @@
   Description: Allows Enhanced E-commerce Google Analytics tracking code to be inserted into WooCommerce store pages.
   Author: Tatvic
   Author URI: http://www.tatvic.com
-  Version: 1.0.7
+  Version: 1.0.8
  */
 
 // Add the integration to WooCommerce
