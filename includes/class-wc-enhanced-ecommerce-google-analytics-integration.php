@@ -7,7 +7,7 @@
  *
  * @class 		WC_Enhanced_Ecommerce_Google_Analytics
  * @extends		WC_Integration
- * @author Sudhir Mishra <sudhirxps@gmail.com>
+ * @author Sudhir Mishra <sudhir@tatvic.com>
  */
 
 class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
@@ -59,8 +59,22 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         
         //Enable display feature code checkbox 
        add_action("admin_footer", array($this, "check_UA_enabled"));
+       
+       //add version details in footer
+       add_action("wp_footer",array($this,"add_plugin_details"));
     }
-
+    
+     /**
+     * display details of plugin
+     *
+     * @access public
+     * @return void
+     */
+    
+    function add_plugin_details(){
+        echo '<!-- Plugin Version: 1.0.8-->';
+    }
+    
     /**
      * Initialise Settings Form Fields
      *
@@ -180,7 +194,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 			})(window,document,"script","//www.google-analytics.com/analytics.js","ga");
-                            //Plugin Version :1.0.7
+                            
 			ga("create", "' . esc_js($tracking_id) . '", "' . $set_domain_name . '");
                         '.$ga_display_feature_code.'
                         ga("require", "ec", "ec.js");
@@ -229,7 +243,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 			})(window,document,"script","//www.google-analytics.com/analytics.js","ga");
-                        //Plugin Version :1.0.7
+                        
 			ga("create", "'. esc_js($tracking_id) . '", "' . $set_domain_name . '");
                         '.$ga_display_feature_code.'
 			ga("require", "ec", "ec.js");
@@ -297,10 +311,10 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         if (version_compare($woocommerce->version, "2.1", ">=")) {
             wc_enqueue_js('
             t_cnt=0;
-            t_ttl_prod=jQuery(".products li").length;
+            t_ttl_prod=jQuery(".ls-pro-sku").length; //jQuery(".products li").length;
             jQuery(".products li").each(function(index){
             t_cnt++;
-                         ga("ec:addImpression", {
+                            ga("ec:addImpression", {
                             "id": jQuery(this).find(".ls-pro-sku").val(),
                             "name": jQuery(this).find(".ls-pro-name").val(),
                             "category": jQuery(this).find(".ls-pro-category").val(),
@@ -345,8 +359,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
          
         } else {
                
-            $woocommerce->add_inline_js('
-            t_cnt=0;
+           $woocommerce->add_inline_js('
+           t_cnt=0;
            t_ttl_prod=jQuery(".products li").length;
            jQuery(".products li").each(function(index){
            t_cnt++;
@@ -517,8 +531,10 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         global $woocommerce;
         $category = get_the_terms($product->ID, "product_cat");
         $categories = "";
+        if($category){
         foreach ($category as $term) {
             $categories.=$term->name . ",";
+        }
         }
          //remove last comma(,) if multiple categories are there
         $categories = rtrim($categories, ",");
@@ -563,8 +579,10 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 
         $category = get_the_terms($product->ID, "product_cat");
         $categories = "";
+        if($category){ 
         foreach ($category as $term) {
             $categories.=$term->name . ",";
+        }
         }
         //remove last comma(,) if multiple categories are there
         $categories = rtrim($categories, ",");
@@ -624,19 +642,22 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         }
 
         global $woocommerce;
-
+        
+        $code="";
         foreach ($woocommerce->cart->cart_contents as $item) {
             $p = get_product($item["product_id"]);
 
             $category = get_the_terms($item["product_id"], "product_cat");
             $categories = "";
+             if($category){
             foreach ($category as $term) {
                 $categories.=$term->name . ",";
+            }
             }
              //remove last comma(,) if multiple categories are there
             $categories = rtrim($categories, ",");
 
-            $code = 'ga("ec:addProduct", {"id": "' . esc_js($p->get_sku()) . '",';
+            $code .= 'ga("ec:addProduct", {"id": "' . esc_js($p->get_sku()) . '",';
             $code .= '"name": "' . esc_js($p->get_title()) . '",';
             $code .= '"category": "' . esc_js($categories) . '",';
             $code .= '"price": "' . esc_js($p->get_price()) . '",';
@@ -644,7 +665,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         }
 
         $code_step_1 = $code . 'ga("ec:setAction","checkout",{"step": 1});';
-        $code_step_1 .= 'ga("send", "event", "Enhanced-Ecommerce", "pageview", "footer",{"nonInteraction": 1});';
+        $code_step_1 .= 'ga("send", "event", "Enhanced-Ecommerce","checkout_step_1",{"nonInteraction": 1});';
         if (version_compare($woocommerce->version, "2.1", ">=")) {
             wc_enqueue_js($code_step_1);
         } else {
@@ -653,7 +674,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 
 
         $code_step_2 = $code . 'ga("ec:setAction","checkout",{"step": 2});';
-        $code_step_2 .= 'ga("send", "event", "Enhanced-Ecommerce", "pageview", "footer",{"nonInteraction": 1});';
+        $code_step_2 .= 'ga("send", "event", "Enhanced-Ecommerce","checkout_step_2",{"nonInteraction": 1});';
 
         if (is_user_logged_in()) {
             if (version_compare($woocommerce->version, "2.1", ">=")) {
@@ -665,7 +686,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         $step_2_on_proceed_to_pay = (!is_user_logged_in() && !$this->enable_guest_checkout ) || (!is_user_logged_in() && $this->enable_guest_checkout && $this->track_login_step_for_guest_user);
 
         $code_step_3 = $code . 'ga("ec:setAction","checkout",{"step": 3});';
-        $code_step_3 .= 'ga("send", "event", "Enhanced-Ecommerce", "pageview", "footer",{"nonInteraction": 1});';
+        $code_step_3 .= 'ga("send", "event", "Enhanced-Ecommerce", "checkout_step_3",{"nonInteraction": 1});';
 
         $inline_js = 'jQuery(document).on("click","#place_order",function(e){';
         if ($step_2_on_proceed_to_pay) {
