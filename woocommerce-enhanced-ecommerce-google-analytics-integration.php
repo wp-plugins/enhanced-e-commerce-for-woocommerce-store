@@ -21,7 +21,7 @@
   Description: Allows Enhanced E-commerce Google Analytics tracking code to be inserted into WooCommerce store pages.
   Author: Tatvic
   Author URI: http://www.tatvic.com
-  Version: 1.0.8
+  Version: 1.0.9
  */
 
 // Add the integration to WooCommerce

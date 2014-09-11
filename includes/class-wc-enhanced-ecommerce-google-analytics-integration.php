@@ -72,7 +72,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      */
     
     function add_plugin_details(){
-        echo '<!-- Plugin Version: 1.0.8-->';
+        echo '<!-- Plugin Version: 1.0.9-->';
     }
     
     /**
@@ -189,17 +189,21 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             $ga_display_feature_code = "";
         }
         
-        echo '<script>
-			(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
+        $code='(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 			})(window,document,"script","//www.google-analytics.com/analytics.js","ga");
                             
 			ga("create", "' . esc_js($tracking_id) . '", "' . $set_domain_name . '");
                         '.$ga_display_feature_code.'
-                        ga("require", "ec", "ec.js");
-			</script>';
-      
+                        ga("require", "ec", "ec.js");';
+        
+            if (version_compare($woocommerce->version, "2.1", ">=")) {
+                wc_enqueue_js($code);
+            } else {
+                $woocommerce->add_inline_js($code);
+            }
+        
       }
 
     /**
@@ -286,7 +290,11 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 				"tax": "' . esc_js($order->get_total_tax()) . '"        // Tax
 			});';
 
-        echo "<script type='text/javascript'>" . $code . "</script>";
+        if (version_compare($woocommerce->version, "2.1", ">=")) {
+            wc_enqueue_js($code);
+        } else {
+            $woocommerce->add_inline_js($code);
+        }
 
         update_post_meta($order_id, "_ga_tracked", 1);
     }
