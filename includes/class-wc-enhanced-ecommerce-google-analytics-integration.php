@@ -72,7 +72,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      */
     
     function add_plugin_details(){
-        echo '<!-- Plugin Version: 1.0.9-->';
+        echo '<!-- Plugin Version: 1.0.9.1-->';
     }
     
     /**
