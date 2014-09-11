@@ -165,6 +165,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @return void
      */
     function google_tracking_code() {
+        global $woocommerce;
         if (is_admin() || current_user_can("manage_options") || $this->ga_standard_tracking_enabled == "no") {
             return;
         }
