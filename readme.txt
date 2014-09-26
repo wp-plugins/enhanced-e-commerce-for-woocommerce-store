@@ -2,13 +2,13 @@
 Contributors: Tatvic
 Plugin Name: Enhanced Ecommerce for Woocommerce store
 Plugin URI: http://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-store/
-Tags: Google Analytics, Universal Analytics, Enhanced E-commerce, E-commerce, e-commerce, woo-commerce,Ecommerce,woocommerce
+Tags: Google Analytics, Universal Analytics, Enhanced E-commerce, E-commerce, e-commerce, woo-commerce,Ecommerce,woocommerce, commerce, Wordpress Enhanced Ecommerce
 Author URI: http://www.tatvic.com/
 Author: Tatvic
 Requires at least: 3.6
 Tested up to: 3.9.2
-Stable tag: 1.0.6.1
-Version: 1.0.6.1
+Stable tag: 1.0.10
+Version: 1.0.10
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -18,22 +18,30 @@ Provides integration between Google Analytics Enhanced Ecommerce and WooCommerce
 <a href="http://www.tatvic.com/enhanced-ecommerce-google-analytics-plugin-woocommerce/">Enhanced Ecommerce Google Analytics</a> is a Free WooCommerce Plugin which allows you to use the newly launched feature of Google Analytics – Enhanced Ecommerce.You can track the user behavior across your e-commerce store starting from product views to thank you page.Enhanced Ecommerce is still in beta and supports only Universal Analytics.
 
 = Features of Plugin =
-* Quick & Easy installation from the wordpress interface
-* Supports four New Reports in Enhanced Ecommerce
-     > Shopping Behaviour Report
-     > Checkout Behaviour Report
-     > Product Performance Report
-     > Sales Performance Report
-* Supports Guest checkout functionality
-* Captures Product Impressions events on the load of the category page and Add-to-Cart events when add-to-cart button is clicked
-* Captures Product Impressions events on the load of the product page and Add-to-Cart events when add-to-cart button is clicked
+1. Quick & Easy installation from the wordpress interface
+2. Supports four New Reports in Enhanced Ecommerce
+     * Shopping Behaviour Report
+     * Checkout Behaviour Report
+     * Product Performance Report
+     * Sales Performance Report
+3. Supports Guest checkout functionality
+4. Supports Display Advertising Feature
+5. Captures Product Impressions, Add to Cart & Product Clicks events on category page 
+6. Captures Product Impressions, Add to Cart & Product Clicks events on product page
+7. Captures Product Impressions, Add to Cart & Product Clicks events on featured Product Section on Homepage
+8. Captures Product Impressions, Add to Cart & Product Clicks events on Recent Product Section on Homepage
+9. Captures Product Impressions, Add to Cart & Product Clicks events on Related Product Section on Productpage 
+10. Set your local currency
 
 = Things to keep in mind before enabling the Enhanced E-commerce plugin =
 * Enable Enhanced E-commerce for your profile/view. This is a profile / view level setting and can be accessed under Admin > View > E-commerce Settings
 
 * Also, add meaningful labels for your checkout steps. We recommend you to label as, Step 1 : Checkout View; Step 2 : Login; Step 3 : Proceed to payment
+
 * Remove standard E-commerce code from thank you along with the ecommerce.js which is included by <code>ga('require', 'ecommerce', 'ecommerce.js');</code>. If you are using a third party plugin for e-commerce tracking, you would have to disable the plugin.
+
 * You need to include ec.js. This can be done by adding a single line of code below your default Google Analytics code snippet <code>ga('require', 'ec', 'ec.js');</code>
+
 * Users who are using Universal Analytics Tag in GTM, you will have to replace it with a custom HTML tag. Add the following code in your customer HTML tag. After adding the code, kindly replace UA-XXXXXXX-Y with your Google Analytics Property ID.
 <pre>
 <!-- Google Analytics tag -->
@@ -50,8 +58,10 @@ ga('require','ec','ec.js');
 <!-- End Google Analytics -->
 </pre>
 * After adding the above code, you will have to activate your plug-in from the Settings page. You can access the setting page from here WooCommerce -> Settings ->Integration ->Enhanced Ecommerce Google Analytics.
-* Find “Enable Enhanced Ecommerce Tracking” in the settings page and check the box to enable the plugin
-* If you have a guest checkout on your WooCommerce store, then Check the box “Track Login Steps For Guest Users”. If you have a guest login but you do not check the box, then it might cause an uneven funnel reporting in Google Analytics.
+
+* Find “Add Enhanced Ecommerce Tracking Code” in the settings page and check the box to enable the plugin
+
+* If you have a guest checkout on your WooCommerce store, then Check the box “Add Code to Track the Login Step of Guest Users”. If you have a guest login but you do not check the box, then it might cause an uneven funnel reporting in Google Analytics.
 
 == Installation ==
 1. Download the plugin file to your computer and unzip it
@@ -61,8 +71,8 @@ ga('require','ec','ec.js');
 
 == Screenshots ==
 1. Enable Enhanced E-commerce for your profile/view. This is a profile / view level setting and can be accessed under Admin > View > E-commerce Settings. Also, add meaningful labels for your checkout steps. We recommend you to label as, Step 1 : Checkout View; Step 2 : Login; Step 3 : Proceed to payment;
-2. Next, you need to activate your plugin from the Settings page for the plugin accessed under, WooCommerce > Settings > Integration > Enhanced Ecommerce Google Analytics
-3. For tracking the Guest users, you need to check the box. Unchecking the box might cause an uneven funnel reported to Google Analytics.
+2. Next, you need to activate your plugin from the Settings page by clicking the checkbox – “Add Enhanced Ecommerce Tracking Code". You can access the same from: WooCommerce > Settings > Integration > Enhanced Ecommerce Google Analytics.
+3. To Track Guest Users, Check the box – Add Code to Track the Login Steps of Guest Users. If you have a Guest Check out & if it’s Unchecked, then it might cause an uneven funnel reporting in Google Analytics.
 
 
 == Frequently Asked Questions ==
@@ -79,7 +89,21 @@ Starting the WooCommerce 2.1 release there are no conflicts. However for earlier
 = 1.0 - 25/06/2014 =
  * Initial release
 
-= 1.0.6.1 - 14/08/2014 =
+= 1.0.6.1 - 15/08/2014 =
  * Added new feature - Product impressions and Product click on category page view , including the    default pagination
  * Fixed-Allow Special Characters in javascript
- 
+
+= 1.0.7 - 28/08/2014 =
+ * Added new feature - Display Advertising Feature
+ * Fixed-Allow back quotes and single quotes in product name, category name etc.
+
+= 1.0.8 - 09/09/2014 =
+ * Fixed- Minor bugs 
+
+= 1.0.9.1 - 09/11/2014 =
+ * Fixed- Minor bug on order page
+
+= 1.0.10 - 09/26/2014 =
+ * Allows user to set local currency
+ * Captures Impressions, Product Clicks and Add to Cart on Featured Product section and Recent Product section  (Home Page)
+ * Captures Impressions, Product Clicks and Add to Cart on Related Product section  (Product Page)
