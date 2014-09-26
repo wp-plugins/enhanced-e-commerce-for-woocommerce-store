@@ -21,7 +21,7 @@
   Description: Allows Enhanced E-commerce Google Analytics tracking code to be inserted into WooCommerce store pages.
   Author: Tatvic
   Author URI: http://www.tatvic.com
-  Version: 1.0.9.1
+  Version: 1.0.10
  */
 
 // Add the integration to WooCommerce
@@ -31,9 +31,9 @@ function wc_enhanced_ecommerce_google_analytics_add_integration($integrations) {
     if (is_object($woocommerce)) {
         include_once( 'includes/class-wc-enhanced-ecommerce-google-analytics-integration.php' );
         $integrations[] = 'WC_Enhanced_Ecommerce_Google_Analytics';
-    }
+     }
 
     return $integrations;
-}
+}   
 
 add_filter('woocommerce_integrations', 'wc_enhanced_ecommerce_google_analytics_add_integration', 10);
