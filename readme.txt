@@ -26,10 +26,12 @@ Provides integration between Google Analytics Enhanced Ecommerce and WooCommerce
      * Sales Performance Report
 3. Supports Guest checkout functionality
 4. Supports Display Advertising Feature
-5. Captures Product Impressions, Add to Cart & Product Clicks events on load of category page 
-6. Captures Product Impressions, Add to Cart & Product Clicks events on load of product page
-7. Captures Product Impressions, Add to Cart & Product Clicks events on load of featured Product Section on Homepage 
-8. Set your local currency
+5. Captures Product Impressions, Add to Cart & Product Clicks events on category page 
+6. Captures Product Impressions, Add to Cart & Product Clicks events on product page
+7. Captures Product Impressions, Add to Cart & Product Clicks events on featured Product Section on Homepage
+8. Captures Product Impressions, Add to Cart & Product Clicks events on Recent Product Section on Homepage
+9. Captures Product Impressions, Add to Cart & Product Clicks events on Related Product Section on Productpage 
+10. Set your local currency
 
 = Things to keep in mind before enabling the Enhanced E-commerce plugin =
 * Enable Enhanced E-commerce for your profile/view. This is a profile / view level setting and can be accessed under Admin > View > E-commerce Settings
@@ -68,10 +70,10 @@ ga('require','ec','ec.js');
 4. Enter your email-address and Google Analytics ID for the plugin to enable the tracking code
 
 == Screenshots ==
-1. Enable Enhanced E-commerce for your profile/view. This is a profile / view level setting and can be accessed under Admin > View > E-commerce Settings. Also, add meaningful labels for your checkout steps. We recommend you to label as, Step 1 : Checkout View; Step 2 : Login; Step 3 : Proceed to payment.
+1. Enable Enhanced E-commerce for your profile/view. This is a profile / view level setting and can be accessed under Admin > View > E-commerce Settings. Also, add meaningful labels for your checkout steps. We recommend you to label as, Step 1 : Checkout View; Step 2 : Login; Step 3 : Proceed to payment;
 2. Next, you need to activate your plugin from the Settings page by clicking the checkbox – “Add Enhanced Ecommerce Tracking Code". You can access the same from: WooCommerce > Settings > Integration > Enhanced Ecommerce Google Analytics.
-To Track Guest Users, Check the box – Add Code to Track the Login Steps of Guest Users. If you have a Guest Check out & if it’s Unchecked, then it might cause an uneven funnel reporting in Google Analytics.
-3. Set your local currency code using this feature.
+3. To Track Guest Users, Check the box – Add Code to Track the Login Steps of Guest Users. If you have a Guest Check out & if it’s Unchecked, then it might cause an uneven funnel reporting in Google Analytics.
+
 
 == Frequently Asked Questions ==
 = Where can I find the setting for this plugin? =
@@ -103,4 +105,5 @@ Starting the WooCommerce 2.1 release there are no conflicts. However for earlier
 
 = 1.0.10 - 09/26/2014 =
  * Allows user to set local currency
- * Captures Impressions, Product Clicks and Add to Cart on load of Featured Products on Home Page
+ * Captures Impressions, Product Clicks and Add to Cart on Featured Product section and Recent Product section  (Home Page)
+ * Captures Impressions, Product Clicks and Add to Cart on Related Product section  (Product Page)
