@@ -7,8 +7,8 @@ Author URI: http://www.tatvic.com/
 Author: Tatvic
 Requires at least: 3.6
 Tested up to: 3.9.2
-Stable tag: 1.0.9.1
-Version: 1.0.9.1
+Stable tag: 1.0.10
+Version: 1.0.10
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -25,9 +25,13 @@ Provides integration between Google Analytics Enhanced Ecommerce and WooCommerce
      * Product Performance Report
      * Sales Performance Report
 3. Supports Guest checkout functionality
-4. Captures Product Impressions events on the load of the category page and Add-to-Cart events when add-to-cart button is clicked
-5. Captures Product Impressions events on the load of the product page and Add-to-Cart events when add-to-cart button is clicked
-6. Supports Display Advertising Feature
+4. Supports Display Advertising Feature
+5. Captures Product Impressions, Add to Cart & Product Clicks events on category page 
+6. Captures Product Impressions, Add to Cart & Product Clicks events on product page
+7. Captures Product Impressions, Add to Cart & Product Clicks events on featured Product Section on Homepage
+8. Captures Product Impressions, Add to Cart & Product Clicks events on Recent Product Section on Homepage
+9. Captures Product Impressions, Add to Cart & Product Clicks events on Related Product Section on Productpage 
+10. Set your local currency
 
 = Things to keep in mind before enabling the Enhanced E-commerce plugin =
 * Enable Enhanced E-commerce for your profile/view. This is a profile / view level setting and can be accessed under Admin > View > E-commerce Settings
@@ -59,6 +63,10 @@ ga('require','ec','ec.js');
 
 * If you have a guest checkout on your WooCommerce store, then Check the box “Add Code to Track the Login Step of Guest Users”. If you have a guest login but you do not check the box, then it might cause an uneven funnel reporting in Google Analytics.
 
+*All the product sections on homepage other than feature product will be fired as Recent Product and will be available in product list performance report.
+
+*All the product sections on product page will be fired as Related Product and will be available in product list performance report.
+
 == Installation ==
 1. Download the plugin file to your computer and unzip it
 2. Using an FTP program, or your hosting control panel, upload the unzipped plugin folder to your WordPress installation’s wp-content/plugins/ directory
@@ -67,8 +75,8 @@ ga('require','ec','ec.js');
 
 == Screenshots ==
 1. Enable Enhanced E-commerce for your profile/view. This is a profile / view level setting and can be accessed under Admin > View > E-commerce Settings. Also, add meaningful labels for your checkout steps. We recommend you to label as, Step 1 : Checkout View; Step 2 : Login; Step 3 : Proceed to payment;
-2. Next, you need to activate your plugin from the Settings page for the plugin accessed under, WooCommerce > Settings > Integration > Enhanced Ecommerce Google Analytics
-3. For tracking the Guest users, you need to check the box. Unchecking the box might cause an uneven funnel reported to Google Analytics.
+2. Next, you need to activate your plugin from the Settings page by clicking the checkbox – “Add Enhanced Ecommerce Tracking Code". You can access the same from: WooCommerce > Settings > Integration > Enhanced Ecommerce Google Analytics.
+3. To Track Guest Users, Check the box – Add Code to Track the Login Steps of Guest Users. If you have a Guest Check out & if it’s Unchecked, then it might cause an uneven funnel reporting in Google Analytics.
 
 
 == Frequently Asked Questions ==
@@ -98,3 +106,8 @@ Starting the WooCommerce 2.1 release there are no conflicts. However for earlier
 
 = 1.0.9.1 - 09/11/2014 =
  * Fixed- Minor bug on order page
+
+= 1.0.10 - 09/26/2014 =
+ * Allows user to set local currency
+ * Captures Impressions, Product Clicks and Add to Cart on Featured Product section and Recent Product section on Homepage
+ * Captures Impressions, Product Clicks and Add to Cart on Related Product section on Product Page
