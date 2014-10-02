@@ -10,6 +10,7 @@
  * @author Sudhir Mishra <sudhir@tatvic.com>
  */
 class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
+
     /**
      * Init and hook in the integration.
      *
@@ -18,6 +19,10 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      */
     public function __construct() {
         global $homepage_json_fp, $homepage_json_rp;
+        //incase of admin setting not saved
+        $path = plugins_url();
+        $admin_setting_handle = file($path . "/enhanced-e-commerce-for-woocommerce-store/includes/settings.txt");
+        $flag_for_admin = $this->explode_admin_setting($admin_setting_handle[0]); //settings handle either to file or screen
 
         $this->id = "enhanced_ecommerce_google_analytics";
         $this->method_title = __("Enhanced Ecommerce Google Analytics", "woocommerce");
@@ -27,17 +32,31 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         $this->init_form_fields();
         $this->init_settings();
 
-        // Define user set variables
-        $this->ga_email = $this->get_option("ga_email");
-        $this->ga_id = $this->get_option("ga_id");
-        $this->ga_set_domain_name = $this->get_option("ga_set_domain_name");
-        $this->ga_local_curr = $this->get_option("ga_local_curr");
-        $this->ga_standard_tracking_enabled = $this->get_option("ga_standard_tracking_enabled");
-        $this->enable_guest_checkout = get_option("woocommerce_enable_guest_checkout") == "yes" ? true : false;
-        $this->track_login_step_for_guest_user = $this->get_option("track_login_step_for_guest_user") == "yes" ? true : false;
-        $this->ga_enhanced_ecommerce_tracking_enabled = $this->get_option("ga_enhanced_ecommerce_tracking_enabled");
-        $this->ga_display_feature_plugin = $this->get_option("ga_display_feature_plugin") == "yes" ? true : false;
-        $this->ga_enhanced_ecommerce_category_page_impression_threshold = $this->get_option("ga_enhanced_ecommerce_category_page_impression_threshold");
+        // Define user set variables -- check for where to read settings
+        if ($flag_for_admin == "yes") {
+            $this->ga_email = $this->get_option("ga_email");
+            $this->ga_id = $this->get_option("ga_id");
+            $this->ga_set_domain_name = $this->get_option("ga_set_domain_name");
+            $this->ga_local_curr = $this->get_option("ga_local_curr");
+            $this->ga_standard_tracking_enabled = $this->get_option("ga_standard_tracking_enabled");
+            $this->enable_guest_checkout = get_option("woocommerce_enable_guest_checkout") == "yes" ? true : false; //guest checkout
+            $this->track_login_step_for_guest_user = $this->get_option("track_login_step_for_guest_user") == "yes" ? true : false; //guest checkout
+            $this->ga_enhanced_ecommerce_tracking_enabled = $this->get_option("ga_enhanced_ecommerce_tracking_enabled");
+            $this->ga_display_feature_plugin = $this->get_option("ga_display_feature_plugin") == "yes" ? true : false;
+            $this->ga_enhanced_ecommerce_category_page_impression_threshold = $this->get_option("ga_enhanced_ecommerce_category_page_impression_threshold");
+        } else {
+            //read from settings.txt
+            $this->ga_email = $this->explode_admin_setting($admin_setting_handle[1]);
+            $this->ga_id = $this->explode_admin_setting($admin_setting_handle[2]);
+            $this->ga_set_domain_name = $this->explode_admin_setting($admin_setting_handle[3]);
+            $this->ga_local_curr = $this->explode_admin_setting($admin_setting_handle[4]);
+            $this->ga_standard_tracking_enabled = $this->explode_admin_setting($admin_setting_handle[5]);
+            $this->enable_guest_checkout = get_option("woocommerce_enable_guest_checkout") == "yes" ? true : false; //guest checkout
+            $this->track_login_step_for_guest_user = $this->explode_admin_setting($admin_setting_handle[6]) === "yes" ? true : false;
+            $this->ga_enhanced_ecommerce_tracking_enabled = $this->explode_admin_setting($admin_setting_handle[7]);
+            $this->ga_display_feature_plugin = $this->explode_admin_setting($admin_setting_handle[8]) == "yes" ? true : false;
+            $this->ga_enhanced_ecommerce_category_page_impression_threshold = $this->explode_admin_setting($admin_setting_handle[9]);
+        }
 
         // Actions
         add_action("woocommerce_update_options_integration_enhanced_ecommerce_google_analytics", array($this, "process_admin_options"));
@@ -61,8 +80,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         add_action("woocommerce_before_shop_loop_item", array($this, "add_divwrap_before_product"));
         add_action("woocommerce_after_shop_loop_item", array($this, "add_divwrap_after_product"));
         add_action("wp_footer", array($this, "loop_add_to_cart"));
-        add_action("wp_footer", array($this, "default_pageview"));
-
+        //add_action("wp_footer", array($this, "default_pageview"));
         //Enable display feature code checkbox 
         add_action("admin_footer", array($this, "admin_check_UA_enabled"));
 
@@ -74,6 +92,17 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 
         //Add Dev ID
         add_action("wp_head", array($this, "add_dev_id"));
+    }
+
+    /**
+     * explode patch settings from settings.txt file
+     *
+     * @access public
+     * @return void
+     */
+    function explode_admin_setting($admin_setting_handle) {
+        $ex_Arr = explode("=", $admin_setting_handle);
+        return preg_replace('/\s+/', '', $ex_Arr[1]);
     }
 
     /**
@@ -129,7 +158,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      */
     function init_form_fields() {
         $ga_currency_code = array("USD" => "USD", "AED" => "AED", "ARS" => "ARS", "AUD" => "AUD", "BGN" => "BGN", "BOB" => "BOB", "BRL" => "BRL", "CAD" => "CAD", "CHF" => "CHF", "CLP" => "CLP", "CNY" => "CNY", "COP" => "COP", "CZK" => "CZK", "DKK" => "DKK", "EGP" => "EGP", "EUR" => "EUR", "FRF" => "FRF", "GBP" => "GBP", "HKD" => "HKD", "HRK" => "HRK", "HUF" => "HUF", "IDR" => "IDR", "ILS" => "ILS", "INR" => "INR", "JPY" => "JPY", "KRW" => "KRW", "LTL" => "LTL", "MAD" => "MAD", "MXN" => "MXN", "MYR" => "MYR", "NOK" => "NOK", "NZD" => "NZD", "PEN" => "PEN", "PHP" => "PHP", "PKR" => "PKR", "PLN" => "PLN", "RON" => "RON", "RSD" => "RSD", "RUB" => "RUB", "SAR" => "SAR", "SEK" => "SEK", "SGD" => "SGD", "THB" => "THB", "TRY" => "TRY", "TWD" => "TWD", "UAH" => "UAH", "VEF" => "VEF", "VND" => "VND", "ZAR" => "ZAR");
-
         $this->form_fields = array(
             "ga_email" => array(
                 "title" => __("Email Address", "woocommerce"),
@@ -171,13 +199,13 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
                 "type" => "checkbox",
                 "checkboxgroup" => "",
                 "description" => sprintf(__("This feature enables remarketing with Google Analytics & Demographic reports. Adding the code is the first step in a 3 step process. <a href='https://support.google.com/analytics/answer/2819948?hl=en' target='_blank'>Learn More</a><br/>This feature can only be enabled if you have enabled UA Tracking from our Plugin. If not, you can still manually add the display advertising code by following the instructions from this <a href='https://developers.google.com/analytics/devguides/collection/analyticsjs/display-features' target='_blank'>link</a>", "woocommerce")),
-                "default" => get_option("ga_display_feature_plugin") ? get_option("ga_display_feature_plugin") : "no"  // Backwards compat
+                "default" => get_option("woocommerce_ga_display_feature_plugin") ? get_option("woocommerce_ga_display_feature_plugin") : "no"  // Backwards compat
             ),
             "ga_enhanced_ecommerce_tracking_enabled" => array(
                 "label" => __("Add Enhanced Ecommerce Tracking Code", "woocommerce"),
                 "type" => "checkbox",
                 "checkboxgroup" => "",
-                "description" =>sprintf(__("This feature adds Enhanced Ecommerce Tracking Code to your Store", "woocommerce")),
+                "description" => sprintf(__("This feature adds Enhanced Ecommerce Tracking Code to your Store", "woocommerce")),
                 "default" => get_option("woocommerce_ga_ecommerce_tracking_enabled") ? get_option("woocommerce_ga_ecommerce_tracking_enabled") : "no"  // Backwards compat
             ),
             "track_login_step_for_guest_user" => array(
@@ -221,6 +249,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      */
     function google_tracking_code() {
         global $woocommerce;
+
         //common validation----start
         if (is_admin() || current_user_can("manage_options") || $this->ga_standard_tracking_enabled == "no") {
             return;
@@ -299,7 +328,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             }
         }
 
-
+        //get domain name if value is set
         if (!empty($this->ga_set_domain_name)) {
             $set_domain_name = esc_js($this->ga_set_domain_name);
         } else {
@@ -395,9 +424,9 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 
         $t_list = "";
         $t_list_clk = "";
-        $t_load_action="";
-        $t_click_action="";
-        
+        $t_load_action = "";
+        $t_click_action = "";
+
         if (is_search()) {
             $t_list_clk = '"list":"Search Results"';
             $t_list = $t_list_clk . ',';
@@ -629,8 +658,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
                         "category" => esc_html($categories)
                 ));
                 array_push($homepage_json_rp, $jsonArr_prod_rp);
+            }
         }
-    }
     }
 
     /**
@@ -830,7 +859,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             return;
         }
         $code = $this->get_ordered_items();
-        
+
         $code_step_2 = $code . 'ga("ec:setAction","checkout",{"step": 2});';
         $code_step_2 .= 'ga("send", "event", "Enhanced-Ecommerce","load","checkout_step_2",{"nonInteraction": 1});';
 
@@ -857,7 +886,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             return;
         }
         $code = $this->get_ordered_items();
-        
+
         //check if guest check out is enabled or not
         $step_2_on_proceed_to_pay = (!is_user_logged_in() && !$this->enable_guest_checkout ) || (!is_user_logged_in() && $this->enable_guest_checkout && $this->track_login_step_for_guest_user);
 
@@ -866,8 +895,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 
         $inline_js = 't_track_clk=0; jQuery(document).on("click","#place_order",function(e){ if(t_track_clk===0){';
         if ($step_2_on_proceed_to_pay) {
-            if(isset($code_step_2))
-            $inline_js .= $code_step_2;
+            if (isset($code_step_2))
+                $inline_js .= $code_step_2;
         }
         $inline_js .= $code_step_3;
         $inline_js .= "t_track_clk++; }});";
@@ -914,23 +943,23 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @access public
      * @return void
      */
-    public function default_pageview() {
+    /* public function default_pageview() {
 
-        global $woocommerce;
-        if ($this->disable_tracking($this->ga_enhanced_ecommerce_tracking_enabled)) {
-            return;
-        }
-        if (!is_order_received_page()) {    
-            if (!$this->disable_tracking($this->ga_standard_tracking_enabled)) {
-                $inline_js = 'ga("send", "event", "Enhanced-Ecommerce", "pageview", "footer",{"nonInteraction": 1})';
-            } else {
-                $inline_js = 'ga("send", "event", "Enhanced-Ecommerce", "pageview", "footer",{"nonInteraction": 1});';
-            }
-        }
+      global $woocommerce;
+      if ($this->disable_tracking($this->ga_enhanced_ecommerce_tracking_enabled)) {
+      return;
+      }
+      if (!is_order_received_page()) {
+      if (!$this->disable_tracking($this->ga_standard_tracking_enabled)) {
+      $inline_js = 'ga("send", "event", "Enhanced-Ecommerce", "pageview", "footer",{"nonInteraction": 1})';
+      } else {
+      $inline_js = 'ga("send", "event", "Enhanced-Ecommerce", "pageview", "footer",{"nonInteraction": 1});';
+      }
+      }
 
-        //check woocommerce version and add code
-        $this->wc_version_compare($inline_js);
-    }
+      //check woocommerce version and add code
+      $this->wc_version_compare($inline_js);
+      } */
 
     /**
      * Check if tracking is disabled
