@@ -63,6 +63,10 @@ ga('require','ec','ec.js');
 
 * If you have a guest checkout on your WooCommerce store, then Check the box “Add Code to Track the Login Step of Guest Users”. If you have a guest login but you do not check the box, then it might cause an uneven funnel reporting in Google Analytics.
 
+*All the product sections on homepage other than feature product will be fired as Recent Product and will be available in product list performance report.
+
+*All the product sections on product page will be fired as Related Product and will be available in product list performance report.
+
 == Installation ==
 1. Download the plugin file to your computer and unzip it
 2. Using an FTP program, or your hosting control panel, upload the unzipped plugin folder to your WordPress installation’s wp-content/plugins/ directory
@@ -105,5 +109,5 @@ Starting the WooCommerce 2.1 release there are no conflicts. However for earlier
 
 = 1.0.10 - 09/26/2014 =
  * Allows user to set local currency
- * Captures Impressions, Product Clicks and Add to Cart on Featured Product section and Recent Product section  (Home Page)
- * Captures Impressions, Product Clicks and Add to Cart on Related Product section  (Product Page)
+ * Captures Impressions, Product Clicks and Add to Cart on Featured Product section and Recent Product section on Homepage
+ * Captures Impressions, Product Clicks and Add to Cart on Related Product section on Product Page
