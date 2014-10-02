@@ -1,0 +1,11 @@
+screen=yes
+email=test@test.com
+ga_id=UA-XXXXXX-1
+domain=auto
+setcurrency=INR
+UA_code=yes
+display_feature=yes
+EE_code=yes
+enabled for Guest Users=yes
+impression_threshold=6
+
