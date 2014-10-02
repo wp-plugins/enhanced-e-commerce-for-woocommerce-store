@@ -20,10 +20,11 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
     public function __construct() {
         global $homepage_json_fp, $homepage_json_rp;
         //incase of admin setting not saved
-        $path = plugins_url();
+       /* $path = plugins_url();
         $admin_setting_handle = file($path . "/enhanced-e-commerce-for-woocommerce-store/includes/settings.txt");
         $flag_for_admin = $this->explode_admin_setting($admin_setting_handle[0]); //settings handle either to file or screen
-
+        */
+        
         $this->id = "enhanced_ecommerce_google_analytics";
         $this->method_title = __("Enhanced Ecommerce Google Analytics", "woocommerce");
         $this->method_description = __("Enhanced Ecommerce is a new feature of Universal Analytics that generates detailed statistics about the users journey from product page to thank you page on your e-store. <br/><a href='http://www.tatvic.com/blog/enhanced-ecommerce/' target='_blank'>Know more about Enhanced Ecommerce.</a>", "woocommerce");
@@ -33,7 +34,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         $this->init_settings();
 
         // Define user set variables -- check for where to read settings
-        if ($flag_for_admin == "yes") {
+      //  if ($flag_for_admin == "yes") {
             $this->ga_email = $this->get_option("ga_email");
             $this->ga_id = $this->get_option("ga_id");
             $this->ga_set_domain_name = $this->get_option("ga_set_domain_name");
@@ -44,7 +45,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             $this->ga_enhanced_ecommerce_tracking_enabled = $this->get_option("ga_enhanced_ecommerce_tracking_enabled");
             $this->ga_display_feature_plugin = $this->get_option("ga_display_feature_plugin") == "yes" ? true : false;
             $this->ga_enhanced_ecommerce_category_page_impression_threshold = $this->get_option("ga_enhanced_ecommerce_category_page_impression_threshold");
-        } else {
+       /* } else {
             //read from settings.txt
             $this->ga_email = $this->explode_admin_setting($admin_setting_handle[1]);
             $this->ga_id = $this->explode_admin_setting($admin_setting_handle[2]);
@@ -56,7 +57,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             $this->ga_enhanced_ecommerce_tracking_enabled = $this->explode_admin_setting($admin_setting_handle[7]);
             $this->ga_display_feature_plugin = $this->explode_admin_setting($admin_setting_handle[8]) == "yes" ? true : false;
             $this->ga_enhanced_ecommerce_category_page_impression_threshold = $this->explode_admin_setting($admin_setting_handle[9]);
-        }
+        }*/
 
         // Actions
         add_action("woocommerce_update_options_integration_enhanced_ecommerce_google_analytics", array($this, "process_admin_options"));
