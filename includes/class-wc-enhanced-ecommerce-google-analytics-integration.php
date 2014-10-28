@@ -92,7 +92,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         add_action("wp_head", array($this, "add_nearest_jQuery"));
 
         //Add Dev ID
-        add_action("wp_head", array($this, "add_dev_id"));
+        add_action("wp_head", array($this, "add_dev_id"),1);
     }
 
     /**
@@ -123,7 +123,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @return void
      */
     function add_divwrap_before_product() {
-        if (!is_home() && !is_product()) {
+         //restrict home page
+        if (!is_home()) {
             echo "<div class=t_singleproduct_cont>";
         }
     }
@@ -135,7 +136,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @return void
      */
     function add_divwrap_after_product() {
-        if (!is_home() && !is_product()) {
+        //restrict home page
+        if (!is_home()) {
             echo "</div>";
         }
     }
