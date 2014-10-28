@@ -991,8 +991,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @return void
      */
     public function send_email_to_tatvic($email, $domain_name, $status) {
-        //set POST variables
         $url = "http://dev.tatvic.com/leadgen/woocommerce-plugin/store_email/";
+        //set POST variables
         $fields = array(
             "email" => urlencode($email),
             "domain_name" => urlencode($domain_name),
