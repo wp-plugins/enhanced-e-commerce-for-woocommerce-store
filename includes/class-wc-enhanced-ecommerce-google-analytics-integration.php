@@ -7,7 +7,8 @@
  *
  * @class 		WC_Enhanced_Ecommerce_Google_Analytics
  * @extends		WC_Integration
- * @author Sudhir Mishra <sudhir@tatvic.com>
+ * @author              Sudhir Mishra <sudhir@tatvic.com>
+ * @contributor         Jigar Navadiya <jigar@tatvic.com>
  */
 class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 
@@ -19,12 +20,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      */
     public function __construct() {
         global $homepage_json_fp, $homepage_json_rp;
-        //incase of admin setting not saved
-       /* $path = plugins_url();
-        $admin_setting_handle = file($path . "/enhanced-e-commerce-for-woocommerce-store/includes/settings.txt");
-        $flag_for_admin = $this->explode_admin_setting($admin_setting_handle[0]); //settings handle either to file or screen
-        */
-        
         $this->id = "enhanced_ecommerce_google_analytics";
         $this->method_title = __("Enhanced Ecommerce Google Analytics", "woocommerce");
         $this->method_description = __("Enhanced Ecommerce is a new feature of Universal Analytics that generates detailed statistics about the users journey from product page to thank you page on your e-store. <br/><a href='http://www.tatvic.com/blog/enhanced-ecommerce/' target='_blank'>Know more about Enhanced Ecommerce.</a>", "woocommerce");
@@ -34,7 +29,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         $this->init_settings();
 
         // Define user set variables -- check for where to read settings
-      //  if ($flag_for_admin == "yes") {
             $this->ga_email = $this->get_option("ga_email");
             $this->ga_id = $this->get_option("ga_id");
             $this->ga_set_domain_name = $this->get_option("ga_set_domain_name");
@@ -45,22 +39,9 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             $this->ga_enhanced_ecommerce_tracking_enabled = $this->get_option("ga_enhanced_ecommerce_tracking_enabled");
             $this->ga_display_feature_plugin = $this->get_option("ga_display_feature_plugin") == "yes" ? true : false;
             $this->ga_enhanced_ecommerce_category_page_impression_threshold = $this->get_option("ga_enhanced_ecommerce_category_page_impression_threshold");
-       /* } else {
-            //read from settings.txt
-            $this->ga_email = $this->explode_admin_setting($admin_setting_handle[1]);
-            $this->ga_id = $this->explode_admin_setting($admin_setting_handle[2]);
-            $this->ga_set_domain_name = $this->explode_admin_setting($admin_setting_handle[3]);
-            $this->ga_local_curr = $this->explode_admin_setting($admin_setting_handle[4]);
-            $this->ga_standard_tracking_enabled = $this->explode_admin_setting($admin_setting_handle[5]);
-            $this->enable_guest_checkout = get_option("woocommerce_enable_guest_checkout") == "yes" ? true : false; //guest checkout
-            $this->track_login_step_for_guest_user = $this->explode_admin_setting($admin_setting_handle[6]) === "yes" ? true : false;
-            $this->ga_enhanced_ecommerce_tracking_enabled = $this->explode_admin_setting($admin_setting_handle[7]);
-            $this->ga_display_feature_plugin = $this->explode_admin_setting($admin_setting_handle[8]) == "yes" ? true : false;
-            $this->ga_enhanced_ecommerce_category_page_impression_threshold = $this->explode_admin_setting($admin_setting_handle[9]);
-        }*/
 
         // Actions
-        add_action("woocommerce_update_options_integration_enhanced_ecommerce_google_analytics", array($this, "process_admin_options"));
+        add_action("woocommerce_update_options_integration_".$this->id, array($this, "process_admin_options"));
         // API Call to LS with e-mail
         // Tracking code
         add_action("wp_head", array($this, "google_tracking_code"));
@@ -81,32 +62,21 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         add_action("woocommerce_before_shop_loop_item", array($this, "add_divwrap_before_product"));
         add_action("woocommerce_after_shop_loop_item", array($this, "add_divwrap_after_product"));
         add_action("wp_footer", array($this, "loop_add_to_cart"));
-        //add_action("wp_footer", array($this, "default_pageview"));
-        //Enable display feature code checkbox 
+        
+		//Enable display feature code checkbox 
         add_action("admin_footer", array($this, "admin_check_UA_enabled"));
 
         //add version details in footer
         add_action("wp_footer", array($this, "add_plugin_details"));
-
-        //Add Nearest JQuery
-        add_action("wp_head", array($this, "add_nearest_jQuery"));
-
+		
+		//check if plugin is deactivated or not
+        add_action("deactivated_plugin", array($this, "detect_plugin_deactivation"));
+        
         //Add Dev ID
-        add_action("wp_head", array($this, "add_dev_id"));
+        add_action("wp_head", array($this, "add_dev_id"), 1);
     }
 
-    /**
-     * explode patch settings from settings.txt file
-     *
-     * @access public
-     * @return void
-     */
-    function explode_admin_setting($admin_setting_handle) {
-        $ex_Arr = explode("=", $admin_setting_handle);
-        return preg_replace('/\s+/', '', $ex_Arr[1]);
-    }
-
-    /**
+     /**
      * add dev id
      *
      * @access public
@@ -123,7 +93,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @return void
      */
     function add_divwrap_before_product() {
-        if (!is_home() && !is_product()) {
+        //add div tag before every product data - Restricted page : Home page
+        if (!is_home()) {
             echo "<div class=t_singleproduct_cont>";
         }
     }
@@ -135,7 +106,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @return void
      */
     function add_divwrap_after_product() {
-        if (!is_home() && !is_product()) {
+        //add div tag before every product data - Restricted page : Home page
+        if (!is_home()) {
             echo "</div>";
         }
     }
@@ -148,7 +120,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      */
     function add_plugin_details() {
         echo '<!--Enhanced Ecommerce Google Analytics Plugin for Woocommerce by Tatvic.'
-        . 'Plugin Version: 1.0.10-->';
+        . 'Plugin Version: 1.0.11-->';
     }
 
     /**
@@ -164,20 +136,25 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
                 "title" => __("Email Address", "woocommerce"),
                 "description" => __("Provide your work email address to receive plugin enhancement updates", "woocommerce"),
                 "type" => "email",
-                "required" => "required",
+                "placeholder" => "example@test.com",
+                'custom_attributes' => array(
+                    'required' => "required",
+                ),
                 "default" => get_option("woocommerce_ga_email") // Backwards compat
             ),
             "ga_id" => array(
                 "title" => __("Google Analytics ID", "woocommerce"),
                 "description" => __("Enter your Google Analytics ID here. You can login into your Google Analytics account to find your ID. e.g.<code>UA-XXXXX-X</code>", "woocommerce"),
                 "type" => "text",
+                "placeholder" => "UA-XXXXX-X",
                 "default" => get_option("woocommerce_ga_id") // Backwards compat
             ),
             "ga_set_domain_name" => array(
                 "title" => __("Set Domain Name", "woocommerce"),
                 "description" => sprintf(__("Enter your domain name here (Optional)")),
                 "type" => "text",
-                "default" => ""
+                "placeholder" => "",
+                "default" => get_option("woocommerce_ga_set_domain_name")
             ),
             "ga_local_curr" => array(
                 "title" => __("Set Currency", "woocommerce"),
@@ -235,11 +212,24 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             if ($save_for_the_plugin && $update_made_for_email) {
                 if ($_REQUEST["woocommerce_enhanced_ecommerce_google_analytics_ga_email"] != "") {
                     $email = $_REQUEST["woocommerce_enhanced_ecommerce_google_analytics_ga_email"];
-                    $domain_name = $_REQUEST["woocommerce_enhanced_ecommerce_google_analytics_ga_set_domain_name"];
-                    $this->send_email_to_tatvic($email, $domain_name);
+                    setcookie("t_store_email_id",$email, 3600 * 1000 * 24 * 365 * 10);
+                    $domain_name = get_site_url();//$_REQUEST["woocommerce_enhanced_ecommerce_google_analytics_ga_set_domain_name"];
+                    $this->send_email_to_tatvic($email, $domain_name,'active');
                 }
             }
         }
+    }
+
+    /**
+     * Notify server that plugin is deactivated
+     *
+     * @access public
+     * @return void
+     */
+    function detect_plugin_deactivation() {
+        $email_id=$_COOKIE['t_store_email_id'];
+        $domain_name = get_site_url();
+        $this->send_email_to_tatvic($email_id, $domain_name,'deactivate');
     }
 
     /**
@@ -444,6 +434,12 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             $t_list = $t_list_clk . ',';
             $t_load_action = "product_impression_rdp";
             $t_click_action = "product_click_rdp";
+        } else if (is_shop()) {
+            //Considered only Related Products
+            $t_list_clk = '"list":"Shop Page"';
+            $t_list = $t_list_clk. ',';
+            $t_load_action = "product_impression_sp";
+            $t_click_action = "product_click_sp";
         }
 
         $impression_threshold = $this->ga_enhanced_ecommerce_category_page_impression_threshold;
@@ -505,6 +501,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
     function add_to_cart() {
         if ($this->disable_tracking($this->ga_enhanced_ecommerce_tracking_enabled))
             return;
+        //return if not product page       
         if (!is_single())
             return;
         global $product;
@@ -871,7 +868,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             //first name on focus call fire
             $step2_onFocus = 't_tracked_focus=0; jQuery("input[name=billing_first_name]").on("focus",function(){ if(t_tracked_focus===0){' . $code_step_2 . ' t_tracked_focus++;}});';
         }
-
         //check woocommerce version and add code
         $this->wc_version_compare($step2_onFocus);
     }
@@ -939,30 +935,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
     }
 
     /**
-     * Sending hits with event
-     *
-     * @access public
-     * @return void
-     */
-    /* public function default_pageview() {
-
-      global $woocommerce;
-      if ($this->disable_tracking($this->ga_enhanced_ecommerce_tracking_enabled)) {
-      return;
-      }
-      if (!is_order_received_page()) {
-      if (!$this->disable_tracking($this->ga_standard_tracking_enabled)) {
-      $inline_js = 'ga("send", "event", "Enhanced-Ecommerce", "pageview", "footer",{"nonInteraction": 1})';
-      } else {
-      $inline_js = 'ga("send", "event", "Enhanced-Ecommerce", "pageview", "footer",{"nonInteraction": 1});';
-      }
-      }
-
-      //check woocommerce version and add code
-      $this->wc_version_compare($inline_js);
-      } */
-
-    /**
      * Check if tracking is disabled
      *
      * @access private
@@ -1013,67 +985,18 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
     }
 
     /**
-     * Adding Nearest Javascript Ref. code 
-     *
-     * @access public
-     * @return void
-     */
-    function add_nearest_jQuery() {
-        $nearest_jQ = "(function($, d) {
-  $.fn.nearest = function(selector) {
-    var self, nearest, el, s, p,
-        hasQsa = d.querySelectorAll;
-
-    function update(el) {
-      nearest = nearest ? nearest.add(el) : $(el);
-    }
-
-    this.each(function() {
-      self = this;
-
-      $.each(selector.split(', '), function() {
-        s = $.trim(this);
-
-        if (!s.indexOf('#')) {
-        // selector starts with an ID
-        update((hasQsa ? d.querySelectorAll(s) : $(s)));
-        } else {
-            // is a class or tag selector
-            // so need to traverse
-            p = self . parentNode;
-            while (p) {
-                el = hasQsa ? p.querySelectorAll(s) : $(p) . find(s);
-                if (el . length) {
-                    update(el);
-                    break;
-                }
-                p = p . parentNode;
-            }
-        }
-        });
-
-        });
-
-        return nearest || $();
-        };
-        }(jQuery, document));
-        ";
-
-        $this->wc_version_compare($nearest_jQ);
-    }
-
-    /**
      * Sending email to remote server
      *
      * @access public
      * @return void
      */
-    public function send_email_to_tatvic($email, $domain_name) {
+    public function send_email_to_tatvic($email, $domain_name, $status) {
         //set POST variables
         $url = "http://dev.tatvic.com/leadgen/woocommerce-plugin/store_email/";
         $fields = array(
             "email" => urlencode($email),
-            "domain_name" => urlencode($domain_name)
+            "domain_name" => urlencode($domain_name),
+            "status"=>urlencode($status)
         );
         wp_remote_post($url, array(
             "method" => "POST",

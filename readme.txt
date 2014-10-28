@@ -7,8 +7,8 @@ Author URI: http://www.tatvic.com/
 Author: Tatvic
 Requires at least: 3.6
 Tested up to: 3.9.2
-Stable tag: 1.0.10
-Version: 1.0.10
+Stable tag: 1.0.11
+Version: 1.0.11
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -107,7 +107,10 @@ Starting the WooCommerce 2.1 release there are no conflicts. However for earlier
 = 1.0.9.1 - 09/11/2014 =
  * Fixed- Minor bug on order page
 
-= 1.0.10 - 09/26/2014 =
+= 1.0.10 - 26/09/2014 =
  * Allows user to set local currency
  * Captures Impressions, Product Clicks and Add to Cart on Featured Product section and Recent Product section on Homepage
  * Captures Impressions, Product Clicks and Add to Cart on Related Product section on Product Page
+
+= 1.0.11 - 28/10/2014 =
+ * Fixed - Minor bugs
