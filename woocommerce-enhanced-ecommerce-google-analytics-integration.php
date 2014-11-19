@@ -71,7 +71,7 @@ register_activation_hook(__FILE__, 'ee_plugin_activate');
 add_filter('woocommerce_integrations', 'wc_enhanced_ecommerce_google_analytics_add_integration', 10);
 
 //custom notification hook
-add_action('admin_menu', 'tvc_admin_menu', 11);
+/*add_action('admin_menu', 'tvc_admin_menu', 11);
 
 //Plugin page detection
 function tvc_admin_menu() {
@@ -88,7 +88,7 @@ function in_plugin_update_message($plugin_data, $r) {
     $t_noti.= '<div class="acf-plugin-update-info" style="background: #913428; color: #fff; padding-left: 16px;">';
     $t_noti .= '<h4>' . __("Important Note:  When you update the plugin, Please save your settings again.", 'acf') . '</h4></div>';
     echo $t_noti;
-}
+}*/
 
 //plugin action links on plugin page
 add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'tvc_plugin_action_links' );
@@ -98,3 +98,29 @@ function tvc_plugin_action_links( $links ) {
    $links[] = '<a href="https://wordpress.org/plugins/enhanced-e-commerce-for-woocommerce-store/faq/" target="_blank">FAQ</a>';
    return $links;
 }
+
+//Custom Admin Header Notifications
+add_action('admin_notices', 'tvc_admin_notice');
+
+function tvc_admin_notice() {
+	global $current_user,$pagenow ;
+        $user_id = $current_user->ID;
+        /* Check that the user hasn't already clicked to ignore the message */
+	if ( ! get_user_meta($user_id, 'tvc_hide_msg') && $pagenow =='plugins.php') {
+        echo '<div class="updated" style="background: #913428; color: #fff; padding-left: 16px;"><p>'; 
+        printf(__('Important Note:  When you update the plugin, Please save your settings again. | <a href="%1$s" style="color: #fff;">Hide Notice</a>'), '?tvc_hide_msg=0');
+        echo "</p></div>";
+        }
+}
+
+add_action('admin_init', 'tvc_custom_header_notification');
+
+function tvc_custom_header_notification() {
+	global $current_user;
+        $user_id = $current_user->ID;
+        /* If user clicks to ignore the notice, add that to their user meta */
+        if ( isset($_GET['tvc_hide_msg']) && '0' == $_GET['tvc_hide_msg'] ) {
+             add_user_meta($user_id, 'tvc_hide_msg', 'true', true);
+	}
+}
+?>
