@@ -70,26 +70,6 @@ register_activation_hook(__FILE__, 'ee_plugin_activate');
 
 add_filter('woocommerce_integrations', 'wc_enhanced_ecommerce_google_analytics_add_integration', 10);
 
-//custom notification hook
-/*add_action('admin_menu', 'tvc_admin_menu', 11);
-
-//Plugin page detection
-function tvc_admin_menu() {
-    global $pagenow;
-    if ($pagenow == 'plugins.php') {
-        $hook = apply_filters('acf/get_info', 'hook');
-        add_action('in_plugin_update_message-' . basename(dirname(__FILE__)) . '/' . basename(__FILE__), 'in_plugin_update_message', 10, 2);
-    }
-}
-
-//plugin Notifacaton Area
-function in_plugin_update_message($plugin_data, $r) {
-    $t_noti = '';
-    $t_noti.= '<div class="acf-plugin-update-info" style="background: #913428; color: #fff; padding-left: 16px;">';
-    $t_noti .= '<h4>' . __("Important Note:  When you update the plugin, Please save your settings again.", 'acf') . '</h4></div>';
-    echo $t_noti;
-}*/
-
 //plugin action links on plugin page
 add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'tvc_plugin_action_links' );
 
@@ -108,7 +88,7 @@ function tvc_admin_notice() {
         /* Check that the user hasn't already clicked to ignore the message */
 	if ( ! get_user_meta($user_id, 'tvc_hide_msg') && $pagenow =='plugins.php') {
         echo '<div class="updated" style="background: #913428; color: #fff; padding-left: 16px;"><p>'; 
-        printf(__('Important Note:  When you update the plugin, Please save your settings again. | <a href="%1$s" style="color: #fff;">Hide Notice</a>'), '?tvc_hide_msg=0');
+        printf(__('Important Note: Kindly Save Again Your Enhanced Ecommerce WooCommerce Plugin Settings by visiting this <a href="'. get_admin_url(null, 'admin.php?page=wc-settings&tab=integration').'" style="color: #F9F76B; text-decoration: underline; font-weight: bold;">Tab</a> - Tatvic | <a href="%1$s" style="color: #fff;">Hide Notice</a>'), '?tvc_hide_msg=0');
         echo "</p></div>";
         }
 }
