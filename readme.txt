@@ -33,7 +33,7 @@ Provides integration between Google Analytics Enhanced Ecommerce and WooCommerce
 9. Captures Product Impressions, Add to Cart & Product Clicks events on Related Product Section on Productpage 
 10. Set your local currency
 
-= Installation Instructions =
+= Installation Instructions  =
 * Enable Enhanced E-commerce for your profile/view. This is a profile / view level setting and can be accessed under Admin > View > E-commerce Settings
 
 * Add meaningful labels for your checkout steps. We recommend you to label as, Step 1 : Checkout View; Step 2 : Login; Step 3 : Proceed to payment
