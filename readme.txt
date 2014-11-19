@@ -7,8 +7,8 @@ Author URI: http://www.tatvic.com/
 Author: Tatvic
 Requires at least: 3.6
 Tested up to: 3.9.2
-Stable tag: 1.0.11
-Version: 1.0.11
+Stable tag: 1.0.12
+Version: 1.0.12
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -114,3 +114,8 @@ Starting the WooCommerce 2.1 release there are no conflicts. However for earlier
 
 = 1.0.11 - 28/10/2014 =
  * Fixed - Minor bugs
+
+= 1.0.12 - 19/11/2014 =
+ * Fixed - Settings not getting saved on few stores
+ * Fixed - Broken layout issue
+ 
