@@ -81,9 +81,9 @@ In case you have already configured auto return for your store, we request you t
 = I’ve install the plugin but I do not see any data in my GA =
 
 Following are one or more reasons:
-1. Please make sure that you have Enabled Enhanced Ecommerce setting in your GA Account. Check out the Step 1 of this logpost.
+* Please make sure that you have Enabled Enhanced Ecommerce setting in your GA Account. Check out the Step 1 of this <a href="http://www.tatvic.com/blog/enhanced-ecommerce/#steps" target="_blank">blogpost</a>.
 
-2. If you have just installed our plugin, then please wait for at-least 24 hours before you 	start seeing any data in your GA. If you still face this issue after 24 hours, please reach out to us via <a href="https://wordpress.org/support/plugin/enhanced-e-commerce-for-woocommerce-store" target="_blank">support thread</a>.
+* If you have just installed our plugin, then please wait for at-least 24 hours before you 	start seeing any data in your GA. If you still face this issue after 24 hours, please reach out to us via <a href="https://wordpress.org/support/plugin/enhanced-e-commerce-for-woocommerce-store" target="_blank">support thread</a>.
 
 = Products with Multi variant not getting recorded in GA =
 
