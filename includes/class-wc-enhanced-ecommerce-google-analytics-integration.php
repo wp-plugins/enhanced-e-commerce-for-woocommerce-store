@@ -139,7 +139,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
                 "type" => "text",
                 "placeholder" => "",
                 "desc_tip"	=>  true,
-                "default" => get_option("ga_Dname")
+                "default" => get_option("ga_Dname") ? get_option("ga_Dname") : "auto"
             ),
             "ga_LC" => array(
                 "title" => __("Set Currency", "woocommerce"),
@@ -152,9 +152,10 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             "ga_ST" => array(
                 "title" => __("Tracking code", "woocommerce"),
                 "label" => __("Add Universal Analytics Tracking Code (Optional)", "woocommerce"),
-                "description" => sprintf(__("This feature adds Universal Analytics Tracking Code to your Store. You don't need to enable this if using a 3rd party analytics plugin. If you chose to add Universal Analytics code snippet via Third party plugins, add <code>ga(\"require\", \"ec\", \"ec.js\");</code> below <code>ga(\"create\",\"UA-XXXXX-X\")</code> in your standard code snippet. Also ensure that the Universal Analytics code is present in the &lt;head&gt; section of the website.", "woocommerce")),
+                "description" => sprintf(__("This feature adds Universal Analytics Tracking Code to your Store. You don't need to enable this if using a 3rd party analytics plugin.", "woocommerce")),
                 "type" => "checkbox",
                 "checkboxgroup" => "start",
+                "desc_tip"	=>  true,
                 "default" => get_option("ga_ST") ? get_option("ga_ST") : "no"  // Backwards compat
             ),
             "ga_DF" => array(
@@ -261,7 +262,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 			})(window,document,"script","//www.google-analytics.com/analytics.js","ga");
                         ga("create", "' . esc_js($tracking_id) . '", "' . $set_domain_name . '");
                         ' . $ga_display_feature_code . '
-                        ga("require", "ec", "ec.js");
+                      
                         ga("send", "pageview");';
 
         //include this on all pages except order confirmation page.
@@ -434,7 +435,9 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         //remove last comma(,) if multiple categories are there
         $categories = rtrim($categories, ",");
 
-        $code = '$(".single_add_to_cart_button").click(function() {
+        $code = '
+              ga("require", "ec", "ec.js");
+            $(".single_add_to_cart_button").click(function() {
                             
                               // Enhanced E-commerce Add to cart clicks 
                               ga("ec:addProduct", {
@@ -486,7 +489,9 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         }
         //prod page detail view json
         $this->wc_version_compare("tvc_po=" . json_encode($prodpage_detail_json) . ";");
-        $code = 'ga("ec:addProduct", {
+        $code = '
+        ga("require", "ec", "ec.js");    
+        ga("ec:addProduct", {
             "id": tvc_po.tvc_i,                   // Product details are provided in an impressionFieldObject.
             "name": tvc_po.tvc_n,
             "category":tvc_po.tvc_c,
@@ -523,14 +528,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         }
         //remove last comma(,) if multiple categories are there
         $categories = rtrim($categories, ",");
-
-       /* echo '<input type="hidden" class="ls-pro-price" value="' . esc_html($product->get_price()) . '" />'
-        .'<input type="hidden" class="ls-pro-id" value="' . esc_html($product->id) . '" />'
-        . '<input type="hidden" class="ls-pro-sku" value="' . esc_html($product->get_sku() ? $product->get_sku() : $product->id) . '"/>'
-        . '<input type="hidden" class="ls-pro-name" value="' . esc_html($product->get_title()) . '"/>'
-        . '<input type="hidden" class="ls-pro-category" value="' . esc_html($categories) . '"/>'
-        . '<input type="hidden" class="ls-pro-isfeatured" value="' . $product->is_featured() . '"/> ';
-        */
         //declare all variable as a global which will used for make json
         global $homepage_json_fp,$homepage_json_ATC_link, $homepage_json_rp,$prodpage_json_relProd,$catpage_json,$prodpage_json_ATC_link,$catpage_json_ATC_link;
         //is home page then make all necessory json
@@ -670,7 +667,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         
         
         $hmpg_impressions_jQ = '
-
+                  ga("require", "ec", "ec.js");
 		function t_products_impre_clicks(t_json_name,t_action,t_list){
                    t_send_threshold=0;
                    t_prod_pos=0;
@@ -909,6 +906,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         $this->wc_version_compare("tvc_cc=" . json_encode($cartpage_prod_array_main) . ";");
 
         $code = '
+        ga("require", "ec", "ec.js");
         $("a[href*=\"?remove_item\"]").click(function(){
             t_url=jQuery(this).attr("href");
         
@@ -939,7 +937,9 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         }
         //call fn to make json
         $this->get_ordered_items();
-        $code= 'for(var t_item in tvc_ch){
+        $code= '
+                ga("require", "ec", "ec.js");
+                for(var t_item in tvc_ch){
 					ga("ec:addProduct", {
 						"id": tvc_ch[t_item].tvc_i,
 						"name": tvc_ch[t_item].tvc_n,
@@ -966,7 +966,9 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         if ($this->disable_tracking($this->ga_eeT)) {
             return;
         }
-        $code= 'for(var t_item in tvc_ch){
+        $code= '
+               
+                for(var t_item in tvc_ch){
 					ga("ec:addProduct", {
 						"id": tvc_ch[t_item].tvc_i,
 						"name": tvc_ch[t_item].tvc_n,
@@ -1000,7 +1002,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         if ($this->disable_tracking($this->ga_eeT)) {
             return;
         }
-        $code= 'for(var t_item in tvc_ch){
+        $code= '
+            for(var t_item in tvc_ch){
 					ga("ec:addProduct", {
 						"id": tvc_ch[t_item].tvc_i,
 						"name": tvc_ch[t_item].tvc_n,

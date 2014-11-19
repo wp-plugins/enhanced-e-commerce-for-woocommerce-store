@@ -7,7 +7,7 @@ Author URI: http://www.tatvic.com/
 Author: Tatvic
 Requires at least: 3.6
 Tested up to: 3.9.2
-Stable tag: 1.0.11
+Stable tag: 1.0.12
 Version: 1.0.12
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -33,33 +33,17 @@ Provides integration between Google Analytics Enhanced Ecommerce and WooCommerce
 9. Captures Product Impressions, Add to Cart & Product Clicks events on Related Product Section on Productpage 
 10. Set your local currency
 
-= Things to keep in mind before enabling the Enhanced E-commerce plugin =
+= Installation Instructions=
+
 * Enable Enhanced E-commerce for your profile/view. This is a profile / view level setting and can be accessed under Admin > View > E-commerce Settings
 
-* Also, add meaningful labels for your checkout steps. We recommend you to label as, Step 1 : Checkout View; Step 2 : Login; Step 3 : Proceed to payment
+* Add meaningful labels for your checkout steps. We recommend you to label as, Step 1 : Checkout View; Step 2 : Login; Step 3 : Proceed to payment
 
 * Remove standard E-commerce code from thank you along with the ecommerce.js which is included by <code>ga('require', 'ecommerce', 'ecommerce.js');</code>. If you are using a third party plugin for e-commerce tracking, you would have to disable the plugin.
 
-* You need to include ec.js. This can be done by adding a single line of code below your default Google Analytics code snippet <code>ga('require', 'ec', 'ec.js');</code>
+* Activate our plug-in from the Settings page. You can access the setting page from here WooCommerce -> Settings ->Integration ->Enhanced Ecommerce Google Analytics.
 
-* Users who are using Universal Analytics Tag in GTM, you will have to replace it with a custom HTML tag. Add the following code in your customer HTML tag. After adding the code, kindly replace UA-XXXXXXX-Y with your Google Analytics Property ID.
-<pre>
-<!-- Google Analytics tag -->
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-	
-ga('create', 'UA-XXXX-Y', 'auto');
-ga('send', 'pageview');
-ga('require','ec','ec.js');
-</script>
-<!-- End Google Analytics -->
-</pre>
-* After adding the above code, you will have to activate your plug-in from the Settings page. You can access the setting page from here WooCommerce -> Settings ->Integration ->Enhanced Ecommerce Google Analytics.
-
-* Find “Add Enhanced Ecommerce Tracking Code” in the settings page and check the box to enable the plugin
+* Find “Add Enhanced Ecommerce Tracking Code” in the settings page and check the box to add the tracking code
 
 * If you have a guest checkout on your WooCommerce store, then Check the box “Add Code to Track the Login Step of Guest Users”. If you have a guest login but you do not check the box, then it might cause an uneven funnel reporting in Google Analytics.
 
@@ -87,6 +71,33 @@ This plugin will add the settings to the Integration tab, to be found in the Woo
 = Does this conflict with the WooCommerce? =
 
 Starting the WooCommerce 2.1 release there are no conflicts. However for earlier the plugin might conflict with the default Google Analytics integration for WooCommerce.
+
+= Why are my PayPal transaction data not getting recorded in GA? =
+
+If you are facing this issue, please check if you have configured auto return in PayPal settings.  Configuring auto return will resolve your issue. Here’s a PayPal <a href="https://www.paypal.com/in/cgi-bin/webscr?cmd=p/mer/express_return_summary-outside" target="_blank">documentation</a> & WooCommerce <a href="http://docs.woothemes.com/document/paypal-standard/#section-5" target="_blank">documentation</a> on understanding & setting up Auto Return.
+
+In case you have already configured auto return for your store, we request you to create a new support thread <a href="https://wordpress.org/support/plugin/enhanced-e-commerce-for-woocommerce-store" target="_blank">here</a> & reach out to us.
+
+= I’ve install the plugin but I do not see any data in my GA =
+
+Following are one or more reasons:
+	1. Please make sure that you have Enabled Enhanced Ecommerce setting in your GA Account. 	Check out the Step 1 of this blogpost.
+
+	2. If you have just installed our plugin, then please wait for at-least 24 hours before you 	start seeing any data in your GA. If you still face this issue after 24 hours, please reach 	out to us via <a href="https://wordpress.org/support/plugin/enhanced-e-commerce-for-woocommerce-store" target="_blank">support thread</a>.
+
+= Products with Multi variant not getting recorded in GA =
+
+Currently our plugin does not support products with multiple variant & hence you may not see their transaction data in GA. Additionally, we have planned to add the same feature in our upcoming release
+
+= My Ecommerce transaction data are not getting recorded in GA =
+
+Please check if you have auto return configured in your payment gateway settings. If a user completes the transaction via a 3rd party payment gateway and is not redirected back to your store’s thank you page, our plugin will not be able to send the transaction data.
+
+Hence, this may result into missing transaction data in your GA. You can resolve this issue by configuring auto return in your payment gateway settings.
+
+= Does your Plugin support Product Refund? =
+
+Our existing plugin does not track product refund data, however we are currently building a pro plugin that gives you access to product Refund data. It's a paid plugin that will give you access to all the important features of Universal Analytics including Access to all the reports of Enhanced Ecommerce, User ID Tracking, Product Refund, I.P Anonymization, etc. If you are interested in our paid Plugin, please reach out to us at <a href="mailto:marketing@tatvic.com">marketing@tatvic.com</a>
 
 == Changelog ==
 
@@ -118,4 +129,5 @@ Starting the WooCommerce 2.1 release there are no conflicts. However for earlier
 = 1.0.12 - 19/11/2014 =
  * Fixed - Settings not getting saved on few stores
  * Fixed - Broken layout issue
- 
+
+Important Note: When you update the plugin, please save your settings again.
