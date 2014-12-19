@@ -18,6 +18,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @access public
      * @return void
      */
+    //set plugin version
+    public $tvc_eeVer = '1.0.13';
     public function __construct() {
         
          //Set Global Variables
@@ -42,7 +44,9 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             $this->ga_email = $this->get_option("ga_email");
             $this->ga_id = $this->get_option("ga_id");
             $this->ga_Dname = $this->get_option("ga_Dname");
-            $this->ga_LC = $this->get_option("ga_LC");
+        $this->ga_LC = get_woocommerce_currency(); //Local Currency yuppi! Got from Back end 
+        //set local currency variable on all page
+        $this->wc_version_compare("tvc_lc=" . json_encode($this->ga_LC) . ";");
             $this->ga_ST = $this->get_option("ga_ST");
             $this->ga_gCkout = $this->get_option("ga_gCkout") == "yes" ? true : false; //guest checkout
             $this->ga_gUser = $this->get_option("ga_gUser") == "yes" ? true : false; //guest checkout
@@ -78,11 +82,35 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         //add version details in footer
         add_action("wp_footer", array($this, "add_plugin_details"));
 		
-		//check if plugin is deactivated or not
-        add_action("deactivate_plugin", array($this, "detect_plugin_deactivation"));
-        
         //Add Dev ID
         add_action("wp_head", array($this, "add_dev_id"), 1);
+        
+         //Advanced Store data Tracking
+        add_action("wp_footer", array($this, "tvc_store_meta_data"));
+    }
+    /**
+     * Get store meta data for trouble shoot
+     * @access public
+     * @return void
+     */
+    function tvc_store_meta_data() {
+        //only on home page
+        global $woocommerce;
+        $tvc_sMetaData = array();
+
+            $tvc_sMetaData = array(
+                'tvc_wcv' => $woocommerce->version,
+                'tvc_wpv' => get_bloginfo('version'),
+                'tvc_eev' => $this->tvc_eeVer,
+                'tvc_cnf' => array(
+                    't_ee' => $this->ga_eeT,
+                    't_df' => $this->ga_DF,
+                    't_gUser'=>$this->ga_gUser,
+                    't_UAen'=>$this->ga_ST,
+                    't_thr' => $this->ga_imTh,                  
+                )
+            );
+            $this->wc_version_compare("tvc_smd=" . json_encode($tvc_sMetaData) . ";");        
     }
 
      /**
@@ -102,7 +130,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @return void
      */
     function add_plugin_details() {
-        echo '<!--Enhanced Ecommerce Google Analytics Plugin for Woocommerce by Tatvic Plugin Version: 1.0.12-->';
+        echo '<!--Enhanced Ecommerce Google Analytics Plugin for Woocommerce by Tatvic Plugin Version:'.$this->tvc_eeVer.'-->';
     }
 
     /**
@@ -112,7 +140,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @return void
      */
     function init_form_fields() {
-        $ga_currency_code = array("USD" => "USD", "AED" => "AED", "ARS" => "ARS", "AUD" => "AUD", "BGN" => "BGN", "BOB" => "BOB", "BRL" => "BRL", "CAD" => "CAD", "CHF" => "CHF", "CLP" => "CLP", "CNY" => "CNY", "COP" => "COP", "CZK" => "CZK", "DKK" => "DKK", "EGP" => "EGP", "EUR" => "EUR", "FRF" => "FRF", "GBP" => "GBP", "HKD" => "HKD", "HRK" => "HRK", "HUF" => "HUF", "IDR" => "IDR", "ILS" => "ILS", "INR" => "INR", "JPY" => "JPY", "KRW" => "KRW", "LTL" => "LTL", "MAD" => "MAD", "MXN" => "MXN", "MYR" => "MYR", "NOK" => "NOK", "NZD" => "NZD", "PEN" => "PEN", "PHP" => "PHP", "PKR" => "PKR", "PLN" => "PLN", "RON" => "RON", "RSD" => "RSD", "RUB" => "RUB", "SAR" => "SAR", "SEK" => "SEK", "SGD" => "SGD", "THB" => "THB", "TRY" => "TRY", "TWD" => "TWD", "UAH" => "UAH", "VEF" => "VEF", "VND" => "VND", "ZAR" => "ZAR");
         $this->form_fields = array(
             "ga_email" => array(
                 "title" => __("Email Address", "woocommerce"),
@@ -122,7 +149,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
                 'custom_attributes' => array(
                     'required' => "required",
                 ),
-                "desc_tip"	=>  true,
+                "desc_tip" => true,
                 "default" => get_option("ga_email") // Backwards compat
             ),
             "ga_id" => array(
@@ -140,14 +167,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
                 "placeholder" => "",
                 "desc_tip"	=>  true,
                 "default" => get_option("ga_Dname") ? get_option("ga_Dname") : "auto"
-            ),
-            "ga_LC" => array(
-                "title" => __("Set Currency", "woocommerce"),
-                "description" => __("Find your Local Currency Code by visiting this <a href='https://developers.google.com/analytics/devguides/platform/currencies#supported-currencies' target='_blank'>link</a>", "woocommerce"),
-                "type" => "select",
-                "required" => "required",
-                "default" => get_option('ga_LC'),
-                "options" => $ga_currency_code
             ),
             "ga_ST" => array(
                 "title" => __("Tracking code", "woocommerce"),
@@ -211,16 +230,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
     }
 
     /**
-     * Notify server that plugin is deactivated
-     *
-     * @access public
-     * @return void
-     */
-    function detect_plugin_deactivation() {
-        $email_id=$this->get_option('ga_email');
-        $this->send_email_to_tatvic($email_id,'deactivate');
-    }
-     /**
      * Google Analytics standard tracking
      *
      * @access public
@@ -368,7 +377,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             }
             //make json for prod meta data on order page
            $this->wc_version_compare("tvc_oc=" . json_encode($orderpage_prod_Array) . ";");
-            
         }
             //orderpage transcation data json
                 $orderpage_trans_Array=array(
@@ -384,7 +392,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 
          $code.='
                 //set local currencies
-            ga("set", "&cu", "' . $this->ga_LC . '");  
+            ga("set", "&cu", tvc_lc);  
             for(var t_item in tvc_oc){
                 ga("ec:addProduct", { 
                     "id": tvc_oc[t_item].tvc_i,
@@ -411,7 +419,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         update_post_meta($order_id, "_ga_tracked", 1);
     }
 
-
     /**
      * Enhanced E-commerce tracking for single product add to cart
      *
@@ -437,7 +444,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 
         $code = '
               ga("require", "ec", "ec.js");
-            $(".single_add_to_cart_button").click(function() {
+            ga("set", "&cu", tvc_lc);
+            jQuery("button[class*=single_add_to_cart_button]").click(function() {
                             
                               // Enhanced E-commerce Add to cart clicks 
                               ga("ec:addProduct", {
@@ -478,14 +486,15 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         //remove last comma(,) if multiple categories are there
         $categories = rtrim($categories, ",");
         //product detail view json
-        $prodpage_detail_json=array(
+        $prodpage_detail_json = array(
+            "tvc_id" => esc_html($product->id),
             "tvc_i" => $product->get_sku() ? $product->get_sku() : $product->id,                   
-            "tvc_n"=> $product->get_title(),
-            "tvc_c"=>$categories,
-            "tvc_p"=>$product->get_price()
+            "tvc_n" => $product->get_title(),
+            "tvc_c" => $categories,
+            "tvc_p" => $product->get_price()
         );
-        if(empty($prodpage_detail_json)){ //prod page array
-            $prodpage_detail_json=array();
+        if (empty($prodpage_detail_json)) { //prod page array
+            $prodpage_detail_json = array();
         }
         //prod page detail view json
         $this->wc_version_compare("tvc_po=" . json_encode($prodpage_detail_json) . ";");
@@ -563,7 +572,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
                         "tvc_c" => esc_html($categories)
                 );
                }
-                      
             } else {
                 //else prod add in homepage recent json    
                 $homepage_json_rp[get_permalink($product->id)] =array(
@@ -593,7 +601,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
                         "tvc_c" => esc_html($categories),
                         "tvc_po" => ++$_SESSION['t_npcnt'],
                 );
-                    
         }
         //category page, search page and shop page json
         else if (is_product_category() || is_search() || is_shop()) {
@@ -613,7 +620,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
                         "tvc_po" => ++$_SESSION['t_npcnt'], 
                 );
             }
-        
     }
 
     /**
@@ -668,6 +674,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         
         $hmpg_impressions_jQ = '
                   ga("require", "ec", "ec.js");
+                  ga("set", "&cu", tvc_lc);
 		function t_products_impre_clicks(t_json_name,t_action,t_list){
                    t_send_threshold=0;
                    t_prod_pos=0;
@@ -907,6 +914,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 
         $code = '
         ga("require", "ec", "ec.js");
+        ga("set", "&cu", tvc_lc);
         $("a[href*=\"?remove_item\"]").click(function(){
             t_url=jQuery(this).attr("href");
         
@@ -939,6 +947,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         $this->get_ordered_items();
         $code= '
                 ga("require", "ec", "ec.js");
+                ga("set", "&cu", tvc_lc);
                 for(var t_item in tvc_ch){
 					ga("ec:addProduct", {
 						"id": tvc_ch[t_item].tvc_i,
@@ -1054,6 +1063,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             //remove last comma(,) if multiple categories are there
             $categories = rtrim($categories, ",");
              $chkout_json[get_permalink($p->id)] = array(
+                "tvc_id" => esc_html($p->id),
                 "tvc_i" => esc_js($p->get_sku() ? $p->get_sku() : $p->id),
                 "tvc_n" => esc_js($p->get_title()),
                 "tvc_p" => esc_js($p->get_price()),
@@ -1061,7 +1071,6 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
                 "tvc_q" => esc_js($item["quantity"]),
                 "isfeatured"=>$p->is_featured()
             );
-
         }
         //return $code;
         //make product data json on check out page
