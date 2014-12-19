@@ -7,8 +7,8 @@ Author URI: http://www.tatvic.com/
 Author: Tatvic
 Requires at least: 3.6
 Tested up to: 3.9.2
-Stable tag: 1.0.12
-Version: 1.0.12
+Stable tag: 1.0.13
+Version: 1.0.13
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -131,3 +131,7 @@ Our existing plugin does not track product refund data, however we are currently
  * Fixed - Broken layout issue
 
 Important Note: When you update the plugin, please save your settings again.
+
+= 1.0.13 - 19/12/2014 =
+ * Currency as field removed from the plugin. Reason: we now automatically passed the currency which you may have set in WooCommerce store
+ * Fixed - Minor bugs
