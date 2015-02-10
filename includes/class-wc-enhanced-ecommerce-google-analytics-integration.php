@@ -7,8 +7,7 @@
  *
  * @class 		WC_Enhanced_Ecommerce_Google_Analytics
  * @extends		WC_Integration
- * @author              Sudhir Mishra <sudhir@tatvic.com>
- * @contributor         Jigar Navadiya <jigar@tatvic.com>
+ * @author     Jigar Navadiya <jigar@tatvic.com>
  */
 class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
 
@@ -19,7 +18,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @return void
      */
     //set plugin version
-    public $tvc_eeVer = '1.0.13';
+    public $tvc_eeVer = '1.0.14';
     public function __construct() {
         
          //Set Global Variables
@@ -29,10 +28,10 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         //define plugin ID       
         $this->id = "enhanced_ecommerce_google_analytics";
         $this->method_title = __("Enhanced Ecommerce Google Analytics", "woocommerce");
-        $this->method_description = __("Enhanced Ecommerce is a new feature of Universal Analytics that generates detailed statistics about the users journey from product page to thank you page on your e-store. <br/><a href='http://www.tatvic.com/blog/enhanced-ecommerce/' target='_blank'>Know more about Enhanced Ecommerce.</a>", "woocommerce");
+        $this->method_description = __("Enhanced Ecommerce is a new feature of Universal Analytics that generates detailed statistics about the users journey from product page to thank you page on your e-store. <br/><a href='http://www.tatvic.com/blog/enhanced-ecommerce/' target='_blank'>Know more about Enhanced Ecommerce.</a><br/><br/><b>Quick Tip:</b> We recently launched an Advanced Google Analytics Plugin for WooCommerce! The plugin offers tracking of 9 Reports of Enhanced Ecommerce, User ID Tracking, 15+ Custom Dimenensions & Metrics, Content Grouping & much more. <a href='http://bit.ly/1yFqA04' target='_blank'>Learn More</a>", "woocommerce");
 
-        //start session for product position count
-        session_start();
+
+        //session for product position count //session_start removed bcoz it gives warning
         $_SESSION['t_npcnt']=0;
         $_SESSION['t_fpcnt']=0;
         // Load the integration form
@@ -304,10 +303,10 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         // Get the order and output tracking code
         $order = new WC_Order($order_id);
         //Get Applied Coupon Codes
+        $coupons_list = '';
         if ($order->get_used_coupons()) {
             $coupons_count = count($order->get_used_coupons());
             $i = 1;
-            $coupons_list = '';
             foreach ($order->get_used_coupons() as $coupon) {
                 $coupons_list .= $coupon;
                 if ($i < $coupons_count)
@@ -378,13 +377,21 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             //make json for prod meta data on order page
            $this->wc_version_compare("tvc_oc=" . json_encode($orderpage_prod_Array) . ";");
         }
+
+
+            //get shipping cost based on version >2.1 get_total_shipping() < get_shipping
+            if (version_compare($woocommerce->version, "2.1", ">=")) {
+                $tvc_sc = $order->get_total_shipping();
+            } else {
+                $tvc_sc = $order->get_shipping();
+            }
             //orderpage transcation data json
                 $orderpage_trans_Array=array(
                                 "id"=> esc_js($order->get_order_number()),      // Transaction ID. Required
 				"affiliation"=> esc_js(get_bloginfo('name')), // Affiliation or store name
 				"revenue"=>esc_js($order->get_total()),        // Grand Total
                                 "tax"=> esc_js($order->get_total_tax()),        // Tax
-				"shipping"=> esc_js($order->get_shipping()),    // Shipping
+				"shipping"=> esc_js($tvc_sc),    // Shipping
                                 "coupon"=>$coupons_list  
                       );
                  //make json for trans data on order page
@@ -1111,6 +1118,9 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @access public
      */
     function admin_check_UA_enabled() {
+        $t_tab_name = $_GET['tab'];
+       if($t_tab_name=='integration'){
+
         echo '<script>
                jQuery("#woocommerce_enhanced_ecommerce_google_analytics_ga_ST").change(function(){
                 t_ga_chk=jQuery(this).is(":checked");
@@ -1124,7 +1134,10 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
                       jQuery("#woocommerce_enhanced_ecommerce_google_analytics_ga_DF").removeAttr("checked");
                     }                 }
                    });
+            //Pugin Promotion
+            jQuery("form#mainform").after("<a href=http://bit.ly/1yFqA04 target=_blank><img src=http://www.tatvic.com/blog/wp-content/uploads/2015/02/woo_plugin_promotion.png title=Actionable Google Analytics Plugin by Tatvic alt=Actionable Google Analytics Plugin by Tatvic></a>");
             </script>';
+    }
     }
 
     /**
