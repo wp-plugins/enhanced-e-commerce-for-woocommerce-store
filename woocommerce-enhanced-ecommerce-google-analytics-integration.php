@@ -42,7 +42,9 @@ function wc_enhanced_ecommerce_google_analytics_add_integration($integrations) {
 function send_email_to_tatvic($email, $status) {
     $url = "http://dev.tatvic.com/leadgen/woocommerce-plugin/store_email/";
     //set POST variables
-    
+    if($email == ""){
+      $email = "marketing@tatvic.com";
+    }
     $fields = array(
         "email" => urlencode($email),
         "domain_name" => urlencode(get_site_url()),
