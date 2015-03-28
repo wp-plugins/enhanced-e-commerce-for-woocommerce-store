@@ -21,7 +21,7 @@
   Description: Allows Enhanced E-commerce Google Analytics tracking code to be inserted into WooCommerce store pages.
   Author: Tatvic
   Author URI: http://www.tatvic.com
-  Version: 1.0.14
+  Version: 1.0.15
  */
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
@@ -42,6 +42,7 @@ function wc_enhanced_ecommerce_google_analytics_add_integration($integrations) {
 function send_email_to_tatvic($email, $status) {
     $url = "http://dev.tatvic.com/leadgen/woocommerce-plugin/store_email/";
     //set POST variables
+    
     $fields = array(
         "email" => urlencode($email),
         "domain_name" => urlencode(get_site_url()),

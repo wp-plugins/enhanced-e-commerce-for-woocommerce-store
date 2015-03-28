@@ -18,7 +18,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @return void
      */
     //set plugin version
-    public $tvc_eeVer = '1.0.14';
+    public $tvc_eeVer = '1.0.15';
     public function __construct() {
         
          //Set Global Variables
@@ -141,13 +141,10 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
     function init_form_fields() {
         $this->form_fields = array(
             "ga_email" => array(
-                "title" => __("Email Address", "woocommerce"),
+                "title" => __("Email Address (Optional)", "woocommerce"),
                 "description" => __("Provide your work email address to receive plugin enhancement updates", "woocommerce"),
                 "type" => "email",
                 "placeholder" => "example@test.com",
-                'custom_attributes' => array(
-                    'required' => "required",
-                ),
                 "desc_tip" => true,
                 "default" => get_option("ga_email") // Backwards compat
             ),
@@ -212,15 +209,15 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
             ),          
         );
         /* When user updates the email, post it to the remote server */
-        if (isset($_GET["tab"]) && isset($_REQUEST["section"]) && isset($_REQUEST["woocommerce_".$this->id."_ga_email"])) {
-
+         if (isset($_GET["tab"]) && isset($_REQUEST["section"]) && isset($_REQUEST["woocommerce_".$this->id."_ga_email"])) {
             $current_tab = ( empty($_GET["tab"]) ) ? false : sanitize_text_field(urldecode($_GET["tab"]));
             $current_section = ( empty($_REQUEST["section"]) ) ? false : sanitize_text_field(urldecode($_REQUEST["section"]));
             $save_for_the_plugin = ($current_tab == "integration" ) && ($current_section == $this->id);
 
             $update_made_for_email = $_REQUEST["woocommerce_".$this->id."_ga_email"] != $this->get_option("ga_email");
             if ($save_for_the_plugin && $update_made_for_email) {
-                if ($_REQUEST["woocommerce_".$this->id."_ga_email"] != "") {
+                // if ($_REQUEST["woocommerce_".$this->id."_ga_email"] != "") 
+                {
                     $email = $_REQUEST["woocommerce_".$this->id."_ga_email"];
                     $this->send_email_to_tatvic($email,'active');
                 }
@@ -1149,6 +1146,10 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
     public function send_email_to_tatvic($email,$status) {
         $url = "http://dev.tatvic.com/leadgen/woocommerce-plugin/store_email/";
         //set POST variables
+        if($email == ""){
+
+            $email = "marketing@tatvic.com";
+        }
         $fields = array(
             "email" => urlencode($email),
             "domain_name" => urlencode(get_site_url()),
