@@ -6,9 +6,9 @@ Tags: Google Analytics, Universal Analytics, Enhanced E-commerce, E-commerce, e-
 Author URI: http://www.tatvic.com/
 Author: Tatvic
 Requires at least: 3.6
-Tested up to: 3.9.2
-Stable tag: 1.0.12
-Version: 1.0.12
+Tested up to: 4.1
+Stable tag: 1.0.15
+Version: 1.0.15
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -33,10 +33,11 @@ Provides integration between Google Analytics Enhanced Ecommerce and WooCommerce
 9. Captures Product Impressions, Add to Cart & Product Clicks events on Related Product Section on Productpage 
 10. Set your local currency
 
+
 = Installation Instructions  =
 * Enable Enhanced E-commerce for your profile/view. This is a profile / view level setting and can be accessed under Admin > View > E-commerce Settings
 
-* Add meaningful labels for your checkout steps. We recommend you to label as, Step 1 : Checkout View; Step 2 : Login; Step 3 : Proceed to payment
+* Add meaningful labels for your checkout steps. We recommend you to label as, Step 1 : Checkout View; Step 2 : Billing Info; Step 3 : Proceed to payment
 
 * Remove standard E-commerce code from thank you along with the ecommerce.js which is included by <code>ga('require', 'ecommerce', 'ecommerce.js');</code>. If you are using a third party plugin for e-commerce tracking, you would have to disable the plugin.
 
@@ -46,9 +47,12 @@ Provides integration between Google Analytics Enhanced Ecommerce and WooCommerce
 
 * If you have a guest checkout on your WooCommerce store, then Check the box “Add Code to Track the Login Step of Guest Users”. If you have a guest login but you do not check the box, then it might cause an uneven funnel reporting in Google Analytics.
 
-*All the product sections on homepage other than feature product will be fired as Recent Product and will be available in product list performance report.
+* All the product sections on homepage other than feature product will be fired as Recent Product and will be available in product list performance report.
 
-*All the product sections on product page will be fired as Related Product and will be available in product list performance report.
+* All the product sections on product page will be fired as Related Product and will be available in product list performance report.
+
+= Need an Advanced Google Analytics Plugin? =
+We have recently launched an Advanced Google Analytics Plugin for WooCommerce which includes tracking of 9 Reports of Enhanced Ecommerce, User ID Tracking, Product Refund, I.P. Anonymization, 15+ Custom Dimenensions & Metrics, Form Field Tracking, Content Grouping & much more. <a href="http://bit.ly/1yFqA04" target="_blank">Learn More</a>
 
 == Installation ==
 1. Download the plugin file to your computer and unzip it
@@ -97,7 +101,19 @@ Hence, this may result into missing transaction data in your GA. You can resolve
 
 = Does your Plugin support Product Refund? =
 
-Our existing plugin does not track product refund data, however we are currently building a pro plugin that gives you access to product Refund data. It's a paid plugin that will give you access to all the important features of Universal Analytics including Access to all the reports of Enhanced Ecommerce, User ID Tracking, Product Refund, I.P Anonymization, etc. If you are interested in our paid Plugin, please reach out to us at <a href="mailto:marketing@tatvic.com">marketing@tatvic.com</a>
+Our existing plugin does not track product refund data, however you can buy our <a href="http://bit.ly/1yFqA04" target="_blank">paid plugin</a> to get access to product Refund data 
+
+= How to verify if you have implemented the Plugin well? =
+
+To verify if you have implemented the plugin well, just log in to your Google Analytics account & check if the data is coming well in your Enhanced Ecommerce Reports.
+
+= How much time will it take to see the data in Google Analytics? =
+
+It generally depends upon the traffic of the store. But in general it may take max up to 24 hours & min 4 hours to see the data in Google Analytics.
+
+= Why the plugin does not sent data when I am logged in as Admin? =
+
+To avoid sending your own transaction data or sessions data in Google Analytics, our plugin doesn't sent the data to GA when you are logged in. Having said, if you are logged in as Shop Manager, plugin will send the data to GA.
 
 == Changelog ==
 
@@ -131,3 +147,15 @@ Our existing plugin does not track product refund data, however we are currently
  * Fixed - Broken layout issue
 
 Important Note: When you update the plugin, please save your settings again.
+
+= 1.0.13 - 19/12/2014 =
+ * Currency as field removed from the plugin. Reason: we now automatically passed the currency which you may have set in WooCommerce store
+ * Fixed - Minor bugs
+
+ = 1.0.14 - 10/02/2015 =
+ * Fixed - session_start() function warning 
+ * Fixed - Notice: Undefined variable: coupons_list
+ * Fixed - woocommerce deprecated function warning
+
+ =  1.0.15 - 28/03/2015 =
+ * Email Field made optional
