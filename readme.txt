@@ -7,8 +7,8 @@ Author URI: http://www.tatvic.com/
 Author: Tatvic
 Requires at least: 3.6
 Tested up to: 4.1
-Stable tag: 1.0.15
-Version: 1.0.15
+Stable tag: 1.0.16
+Version: 1.0.16
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -159,3 +159,6 @@ Important Note: When you update the plugin, please save your settings again.
 
  =  1.0.15 - 28/03/2015 =
  * Email Field made optional
+
+ = 1.0.16 - 01/04/2015 =
+ * Minor Bug Fixes as per Woredpress Guidlines

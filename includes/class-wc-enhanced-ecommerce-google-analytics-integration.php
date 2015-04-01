@@ -18,7 +18,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @return void
      */
     //set plugin version
-    public $tvc_eeVer = '1.0.15';
+    public $tvc_eeVer = '1.0.16';
     public function __construct() {
         
          //Set Global Variables
@@ -27,7 +27,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         
         //define plugin ID       
         $this->id = "enhanced_ecommerce_google_analytics";
-        $this->method_title = __("Enhanced Ecommerce Google Analytics", "woocommerce");
+        $this->method_title = __("Enhanced Ecommerce Google Analytics", "enhanced-e-commerce-for-woocommerce-store");
         $this->method_description = __("Enhanced Ecommerce is a new feature of Universal Analytics that generates detailed statistics about the users journey from product page to thank you page on your e-store. <br/><a href='http://www.tatvic.com/blog/enhanced-ecommerce/' target='_blank'>Know more about Enhanced Ecommerce.</a><br/><br/><b>Quick Tip:</b> We recently launched an Advanced Google Analytics Plugin for WooCommerce! The plugin offers tracking of 9 Reports of Enhanced Ecommerce, User ID Tracking, 15+ Custom Dimenensions & Metrics, Content Grouping & much more. <a href='http://bit.ly/1yFqA04' target='_blank'>Learn More</a>", "woocommerce");
 
 
