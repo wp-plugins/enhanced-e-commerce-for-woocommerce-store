@@ -560,7 +560,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
                         "tvc_id" => esc_html($product->id),
                         "tvc_i" => esc_html($product->get_sku() ? $product->get_sku() : $product->id),
                         "tvc_n" => esc_html($product->get_title()),
-                        "tvc_n" => esc_html($product->get_price()),
+                        "tvc_p" => esc_html($product->get_price()),
                         "tvc_c" => esc_html($categories),
                         "tvc_po" => ++$_SESSION['t_fpcnt'],
                         "ATC-link"=>$product->add_to_cart_url()
