@@ -1115,8 +1115,8 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @access public
      */
     function admin_check_UA_enabled() {
-        $t_tab_name = $_GET['tab'];
-       if($t_tab_name=='integration'){
+        $t_tab_name = ( isset( $_GET['tab'] ) ? : false );
+        if($t_tab_name=='integration'){
 
         echo '<script>
                jQuery("#woocommerce_enhanced_ecommerce_google_analytics_ga_ST").change(function(){
