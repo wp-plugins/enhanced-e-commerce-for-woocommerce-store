@@ -1115,7 +1115,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
      * @access public
      */
     function admin_check_UA_enabled() {
-        $t_tab_name = ( isset( $_GET['tab'] ) ? : false );
+        $t_tab_name = ( isset( $_GET['tab'] ) ? $_GET['tab'] : false );
         if($t_tab_name=='integration'){
 
         echo '<script>
