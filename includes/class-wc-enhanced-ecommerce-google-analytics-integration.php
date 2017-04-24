@@ -82,7 +82,7 @@ class WC_Enhanced_Ecommerce_Google_Analytics extends WC_Integration {
         add_action("wp_footer", array($this, "add_plugin_details"));
 		
         //Add Dev ID
-        add_action("wp_head", array($this, "add_dev_id"), 1);
+        add_action("wp_head", array($this, "add_dev_id"));
         
          //Advanced Store data Tracking
         add_action("wp_footer", array($this, "tvc_store_meta_data"));
